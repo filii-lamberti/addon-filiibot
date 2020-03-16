@@ -64,10 +64,10 @@ typings/
 # next.js build output
 .next
 
-# enmap sqlite database file
-data/enmap.sqlite*
-
 # local options.json file
 options.json
+
+# enmap sqlite database file
+filiibot/rootfs/opt/filiibot/data/enmap.sqlite*
 
 \.vscode/
