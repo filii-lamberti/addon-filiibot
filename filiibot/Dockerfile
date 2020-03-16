@@ -2,9 +2,6 @@ ARG BUILD_FROM=hassioaddons/base:7.0.3
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
-# Add env
-ENV VERSION_TAG="v3.2.4"
-
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -18,23 +15,13 @@ RUN \
     && apk add --no-cache \
         ffmpeg=4.2.1-r3 \
         nodejs=12.15.0-r1 \
-        npm=12.15.0-r1 \
-    \
-    && curl -J -L -o /tmp/archive.zip \
-        "https://gitlab.com/filii-lamberti/filiibot_nodejs/-/archive/${VERSION_TAG}/filiibot_nodejs-${VERSION_TAG}.zip" \
-    \
-    && mkdir -p /tmp/filiibot \
-    && unzip -d /tmp/filiibot /tmp/archive.zip \
-    && mkdir -p /opt/filiibot \
-    \
-    && mv /tmp/filiibot/filiibot_nodejs-${VERSION_TAG}/bot.js /opt/filiibot/ \
-    && mv /tmp/filiibot/filiibot_nodejs-${VERSION_TAG}/package-lock.json /opt/filiibot/ \
-    && mv /tmp/filiibot/filiibot_nodejs-${VERSION_TAG}/package.json /opt/filiibot/ \
-    && mv /tmp/filiibot/filiibot_nodejs-${VERSION_TAG}/welcomeDm.txt /opt/filiibot/ \
-    \
-    && rm -fr /tmp/* \
-    \
-    && cd /opt/filiibot \
+        npm=12.15.0-r1
+
+# Copy root filesystem
+COPY rootfs /
+
+RUN \
+    cd /opt/filiibot \
     \
     && npm install \
         --no-optional \
@@ -43,9 +30,6 @@ RUN \
     && npm cache clear --force \
     \
     && apk del --purge .build-dependencies
-
-# Copy root filesystem
-COPY rootfs /
 
 # Build arugments
 ARG BUILD_ARCH
