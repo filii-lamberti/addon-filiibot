@@ -6,11 +6,7 @@
   "url": "https://gitlab.com/filii-lamberti/filii-addons/tree/master/filiibot-addon",
   "startup": "application",
   "arch": [
-    "aarch64",
-    "amd64",
-    "armhf",
-    "armv7",
-    "i386"
+    "amd64"
   ],
   "boot": "auto",
   "hassio_api": true,
