@@ -1,0 +1,20 @@
+Hey, ik ben de FiliiBot! Bedankt om lid te worden van de Filii Lamberti Discordserver!
+
+
+Gelieve je nickname in de Filii Discord aan te passen naar iets dat gekend is door de leden van Filii (zoals je naam of je clubnaam).
+
+Kijk ook zeker een keer in het **#regels** kanaal in het _Informatiebureau_ voor de regels van de server en uitleg over de kanalen.
+
+We maken gebruik van een aantal bots op deze server. __Rythm__ wordt gebruikt als Radio Lambertus en heeft als prefix **!**. Deze kan enkel gebruikt worden in het **#verzoekjes** kanaal.
+
+Voor alle Dank Memes is er __Dank Memer__. Deze heeft als prefix **pls**. (pls trigger, enzovoort...).
+
+In het kanaal **#poképrullen** kan je meedoen met Pokémon op de Discordserver aan de hand van de __Pokécord__ bot. Deze heeft als prefix **?**.
+
+
+Ten slotte heb je mij. Ik zal de inside jokes van Filii gaande houden, samen met wat handige commando's. Mijn prefix is **` + prefix + `**.
+
+
+Veel plezier, and remember:
+
+___Toujours Fidèle et Sans Souci!___
