@@ -19,5 +19,5 @@
     "token": "match(^[A-Za-z0-9\\.]+$)",
     "prefix": "match(^.$)"
   },
-  "image": "filii/filiibot"
+  "image": "filii/filiibot-{arch}"
 }

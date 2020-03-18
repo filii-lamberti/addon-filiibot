@@ -48,7 +48,7 @@ LABEL \
     org.label-schema.name="Filiibot" \
     org.label-schema.schema-version="1.0" \
     org.label-schema.url="https://addons.community" \
-    org.label-schema.usage="https://gitlab.com/filii-lamberti/filii-addons/blob/master/filiibot-addon/README.md" \
+    org.label-schema.usage="https://gitlab.com/filii-lamberti/addon-filiibot" \
     org.label-schema.vcs-ref=${BUILD_REF} \
     org.label-schema.vcs-url="https://gitlab.com/filii-lamberti/filii-addons" \
     org.label-schema.vendor="Filii Lamberti"
