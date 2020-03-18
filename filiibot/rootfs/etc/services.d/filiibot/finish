@@ -1,7 +1,7 @@
 #!/usr/bin/execlineb -S0
 # ==============================================================================
-# Community Hass.io Add-ons: FiliiBot
-# Take down the S6 supervision tree when FiliiBot fails
+# Filii Lamberti Home Assistant Add-ons: Filiibot
+# Take down the S6 supervision tree when Filiibot fails
 # ==============================================================================
 if -n { s6-test $# -ne 0 }
 if -n { s6-test ${1} -eq 256 }

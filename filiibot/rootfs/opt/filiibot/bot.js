@@ -7,7 +7,7 @@ let options;
 
 if (!supervisorToken) {
   // eslint-disable-next-line no-console
-  console.log('You are not running this as an Hass.io add-on!');
+  console.log('You are not running this as an Home Assistant add-on!');
   // Here we import the options.json file
   options = JSON.parse(fs.readFileSync('./options.json', 'utf8'));
   options.enmapDataDir = './data';
@@ -303,7 +303,7 @@ discordClient.on('error', (error) => {
 discordClient.on('guildCreate', (guild) => {
   log(
     `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${
-      guild.memberCount
+    guild.memberCount
     } members!`,
   );
 });
@@ -380,7 +380,7 @@ discordClient.on('message', async (message) => {
   // test het bericht op regexBen
   if (regexBen.test(berichtOrigineel)) {
     // reply but replace the beginning
-    message.channel.send(`Dag ${berichtOrigineel.replace(regexBen, '')}, ik ben de FiliiBot!`);
+    message.channel.send(`Dag ${berichtOrigineel.replace(regexBen, '')}, ik ben de Filiibot!`);
     return;
   }
 

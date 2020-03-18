@@ -1,13 +1,13 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Community Hass.io Add-ons: FiliiBot
-# Starts the FiliiBot
+# Filii Lamberti Home Assistant Add-ons: Filiibot
+# Starts the Filiibot
 # ==============================================================================
 
 # Set the current working dir to /opt
-cd /opt/filiibot || bashio::exit.nok "Could not change directory to FiliiBot"
+cd /opt/filiibot || bashio::exit.nok "Could not change directory to Filiibot"
 
-bashio::log.info "Starting FiliiBot..."
+bashio::log.info "Starting Filiibot..."
 
-# And finally start the FiliiBot
+# And finally start the Filiibot
 exec node bot.js
