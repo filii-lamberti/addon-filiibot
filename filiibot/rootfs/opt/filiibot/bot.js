@@ -302,9 +302,7 @@ discordClient.on('error', (error) => {
 // This event triggers when the bot joins a guild.
 discordClient.on('guildCreate', (guild) => {
   log(
-    `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${
-    guild.memberCount
-    } members!`,
+    `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
   );
 });
 
@@ -521,7 +519,7 @@ discordClient.on('message', async (message) => {
 
       case 'ls': {
         let bericht;
-        if (filiikot.people == 0) {
+        if (filiikot.people === '0') {
           bericht = 'er is momenteel niemand aanwezig.';
         } else {
           bericht = 'aanwezig:';
