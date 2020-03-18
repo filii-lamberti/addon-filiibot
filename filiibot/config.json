@@ -20,5 +20,6 @@
     "debugging": "bool?",
     "token": "str",
     "prefix": "str"
-  }
+  },
+  "image": "filii/filiibot"
 }

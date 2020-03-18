@@ -13,9 +13,7 @@ RUN \
         python2=2.7.16-r3 \
     \
     && apk add --no-cache \
-        ffmpeg=4.2.1-r3 \
-        nodejs=12.15.0-r1 \
-        npm=12.15.0-r1
+        ffmpeg=4.2.1-r3
 
 # Copy root filesystem
 COPY rootfs /
