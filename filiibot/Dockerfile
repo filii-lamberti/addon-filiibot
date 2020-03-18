@@ -8,7 +8,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Copy root filesystem
 COPY rootfs /
 
-# Install requirements
+# Setup base
+# hadolint ignore=DL3003
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         g++=9.2.0-r3 \
@@ -28,7 +29,7 @@ RUN \
     \
     && npm cache clear --force \
     \
-    && apk del --purge .build-dependencies
+    && apk del --no-cache --purge .build-dependencies
 
 # Build arguments
 ARG BUILD_ARCH
