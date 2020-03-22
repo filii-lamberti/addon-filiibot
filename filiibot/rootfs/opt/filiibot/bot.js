@@ -438,7 +438,7 @@ discordClient.on('message', async (message) => {
 
               let selection;
               for (selection = 0; selection < response.data.length; selection += 1) {
-                bericht += `\n${selection}. ${response.data[selection].title}`;
+                bericht += `\n${selection}. ${response.data[selection].item.title}`;
               }
 
               message.reply(bericht);
@@ -449,7 +449,7 @@ discordClient.on('message', async (message) => {
             });
         } else {
           log(`Selecting song ${subcommand} of searchResult`);
-          message.reply(searchResult[subcommand].html.text);
+          message.reply(searchResult[subcommand].item.html.text);
           discordClient.people.remove(message.member.id, 'searchResult');
           log('Clearing searchResult');
         }
