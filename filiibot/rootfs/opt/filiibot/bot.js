@@ -450,7 +450,7 @@ discordClient.on('message', async (message) => {
         } else {
           log(`Selecting song ${subcommand} of searchResult`);
           message.reply(searchResult[subcommand].item.html.text);
-          discordClient.people.remove(message.member.id, 'searchResult');
+          discordClient.people.set(message.member.id, [], 'searchResult');
           log('Clearing searchResult');
         }
         /*
