@@ -6,7 +6,11 @@ FROM ${BUILD_FROM}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Copy root filesystem
-COPY rootfs /
+COPY rootfs/etc /etc/
+COPY rootfs/opt/filiibot/package-lock.json \
+    rootfs/opt/filiibot/package.json \
+    rootfs/opt/filiibot/welcomeDm.txt \
+    /opt/filiibot/
 
 # Setup base
 # hadolint ignore=DL3003
@@ -29,6 +33,8 @@ RUN \
     && npm cache clear --force \
     \
     && apk del --no-cache --purge .build-dependencies
+
+COPY rootfs/opt/filiibot/bot.js /opt/filiibot/
 
 # Build arguments
 ARG BUILD_ARCH
