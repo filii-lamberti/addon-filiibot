@@ -9,7 +9,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY rootfs/etc /etc/
 COPY rootfs/opt/filiibot/package-lock.json \
     rootfs/opt/filiibot/package.json \
-    rootfs/opt/filiibot/welcomeDm.txt \
     /opt/filiibot/
 
 # Setup base
@@ -34,7 +33,9 @@ RUN \
     \
     && apk del --no-cache --purge .build-dependencies
 
-COPY rootfs/opt/filiibot/bot.js /opt/filiibot/
+COPY rootfs/opt/filiibot/bot.js \
+    rootfs/opt/filiibot/welcomeDm.txt \
+    /opt/filiibot/
 
 # Build arguments
 ARG BUILD_ARCH
