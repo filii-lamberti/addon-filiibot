@@ -428,6 +428,8 @@ discordClient.on('message', async (message) => {
           // Codex REST API
           axios.get(searchUrl)
             .then((response) => {
+              log(response);
+              log(response.data);
               // handle success
               discordClient.people.set(message.member.id, response.data, 'searchResult');
 
@@ -446,12 +448,11 @@ discordClient.on('message', async (message) => {
               log(`Error: ${error}`);
             });
         } else {
+          log(subcommand);
           message.reply(searchResult[subcommand].html.text);
           discordClient.people.set(message.member.id, [], 'searchResult');
         }
         /*
-        const songPage = songs.filter((song) => song.Page === subcommand);
-        log(songPage);
         message.reply(
         `je kan ${songPage[0].Title} vinden op https://studentencodex.org/lied/${
             songPage[0].FriendlyUrl
