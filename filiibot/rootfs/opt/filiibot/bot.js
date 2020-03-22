@@ -448,9 +448,10 @@ discordClient.on('message', async (message) => {
               log(`Error: ${error}`);
             });
         } else {
-          log(subcommand);
+          log(`Selecting song ${subcommand} of searchResult`);
           message.reply(searchResult[subcommand].html.text);
-          discordClient.people.set(message.member.id, [], 'searchResult');
+          discordClient.people.remove(message.member.id, 'searchResult');
+          log(`Clearing searchResult`);
         }
         /*
         message.reply(
