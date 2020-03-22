@@ -451,7 +451,7 @@ discordClient.on('message', async (message) => {
           log(`Selecting song ${subcommand} of searchResult`);
           message.reply(searchResult[subcommand].html.text);
           discordClient.people.remove(message.member.id, 'searchResult');
-          log(`Clearing searchResult`);
+          log('Clearing searchResult');
         }
         /*
         message.reply(
