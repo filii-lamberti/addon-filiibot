@@ -18,7 +18,7 @@
     "humanize-duration": "^3.22.0",
     "moment": "^2.24.0",
     "mqtt": "^3.0.0",
-    "ytdl-core": "^2.0.0"
+    "ytdl-core": "^2.0.1"
   },
   "license": "MIT",
   "devDependencies": {
