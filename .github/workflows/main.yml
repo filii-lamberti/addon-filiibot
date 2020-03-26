@@ -43,45 +43,39 @@ jobs:
             -v "$(pwd)":/data homeassistant/amd64-builder \
             --target filiibot --amd64 --test
 
-  build-latest:
+  build:
     needs: test
-    name: Build latest image
+    name: Build image
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build and push latest Docker image
+        if: github.event_name == 'push'
         run: |
+          sed -i "s/dev/latest/g" filiibot/config.json
           docker run --rm --privileged \
             -v ~/.docker:/root/.docker \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v "$(pwd)":/data homeassistant/amd64-builder \
-            --target filiibot --all --version "latest" \
+            --target filiibot --all \
             --docker-user ${{ secrets.DOCKER_USERNAME }} \
             --docker-password ${{ secrets.DOCKER_PASSWORD }}
-
-  build-tagged:
-    needs: build-latest
-    name: Build tagged image
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Build and push tagged Docker image
+        if: startsWith(github.ref, 'refs/tags/v')
         run: |
           ADDON_VERSION=$( cut -c12- <<< ${{ github.ref }} )
+          sed -i "s/dev/$ADDON_VERSION/g" filiibot/config.json
           docker run --rm --privileged \
             -v ~/.docker:/root/.docker \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v "$(pwd)":/data homeassistant/amd64-builder \
-            --target filiibot --all --version $ADDON_VERSION \
+            --target filiibot --all \
             --docker-user ${{ secrets.DOCKER_USERNAME }} \
             --docker-password ${{ secrets.DOCKER_PASSWORD }}
 
   publish:
-    needs: build-tagged
+    needs: build
     name: Publish release
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +91,7 @@ jobs:
           repository: filii-lamberti/repository
           path: repository
       - name: Create local changes and commit files
+        continue-on-error: true
         run: |
           ADDON_NAME=$( cut -c22- <<< ${{ github.repository }} )
           ADDON_VERSION=$( cut -c12- <<< ${{ github.ref }} )
@@ -107,7 +102,6 @@ jobs:
           git config --local user.name "Filii Lamberti"
           git add .
           git commit -m "Upgrade $ADDON_NAME to v$ADDON_VERSION" -a
-        continue-on-error: true
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
