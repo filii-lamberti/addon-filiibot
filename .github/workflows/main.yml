@@ -65,7 +65,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
           ADDON_VERSION=$( cut -c12- <<< ${{ github.ref }} )
-          sed -i "s/dev/$ADDON_VERSION/g" filiibot/config.json
+          sed -i "s/latest/$ADDON_VERSION/g" filiibot/config.json
           docker run --rm --privileged \
             -v ~/.docker:/root/.docker \
             -v /var/run/docker.sock:/var/run/docker.sock \
