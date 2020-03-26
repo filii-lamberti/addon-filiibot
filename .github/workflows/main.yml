@@ -1,0 +1,116 @@
+name: Continuous integration and deployment
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches: [master]
+    # Sequence of patterns matched against refs/tags
+    tags: [v*]
+
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Install ESLint and dependencies
+        run: npm ci
+        working-directory: ./filiibot/rootfs/opt/filiibot
+      - name: Run ESLint
+        run: node_modules/eslint/bin/eslint.js bot.js
+        working-directory: ./filiibot/rootfs/opt/filiibot
+
+  test:
+    needs: lint
+    name: Test code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Test docker build
+        run: |
+          docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$(pwd)":/data homeassistant/amd64-builder \
+            --target filiibot --amd64 --test
+
+  build-latest:
+    needs: test
+    name: Build latest image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build and push latest Docker image
+        run: |
+          docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$(pwd)":/data homeassistant/amd64-builder \
+            --target filiibot --all --version latest
+            --docker-user ${{ secrets.DOCKER_USERNAME }} \
+            --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  build-tagged:
+    needs: build-latest
+    name: Build tagged image
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build and push tagged Docker image
+        run: |
+          ADDON_VERSION=$( cut -c12- <<< ${{ github.ref }} )
+          docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$(pwd)":/data homeassistant/amd64-builder \
+            --target filiibot --all --version $ADDON_VERSION
+            --docker-user ${{ secrets.DOCKER_USERNAME }} \
+            --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  publish:
+    needs: build-tagged
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout add-on code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          path: addon
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          repository: filii-lamberti/repository
+          path: repository
+      - name: Create local changes and commit files
+        run: |
+          ADDON_NAME=$( cut -c22- <<< ${{ github.repository }} )
+          ADDON_VERSION=$( cut -c12- <<< ${{ github.ref }} )
+          cp -v addon/README.md addon/filiibot/config.json repository/filiibot/
+          cd repository
+          sed -i "s/dev/$ADDON_VERSION/g" filiibot/config.json
+          git config --local user.email "filii.lamberti@gmail.com"
+          git config --local user.name "Filii Lamberti"
+          git add .
+          git commit -m "Upgrade $ADDON_NAME to v$ADDON_VERSION" -a
+        continue-on-error: true
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
+          directory: repository
+          repository: filii-lamberti/repository
