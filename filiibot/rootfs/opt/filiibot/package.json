@@ -1,13 +1,10 @@
 {
   "name": "filiibot",
-  "version": "3.2.4",
-  "description": "Node.js app voor de Filii Discord bot",
-  "author": "Filii Lamberti",
+  "version": "1.0.0",
   "main": "bot.js",
-  "scripts": {
-    "start": "node bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "repository": "https://gitlab.com/filii-lamberti/addon-filiibot",
+  "author": "Jorim Tielemans",
+  "license": "MIT",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
     "axios": "^0.19.2",
@@ -20,21 +17,9 @@
     "mqtt": "^3.0.0",
     "ytdl-core": "^2.0.1"
   },
-  "license": "MIT",
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/filii-lamberti/filiibot_nodejs.git"
-  },
-  "bugs": {
-    "url": "https://gitlab.com/filii-lamberti/filiibot_nodejs/issues"
-  },
-  "homepage": "https://gitlab.com/filii-lamberti/filiibot_nodejs#readme",
-  "optionalDependencies": {
-    "bufferutil": "^4.0.1"
   }
 }
