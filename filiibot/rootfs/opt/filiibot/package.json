@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "bot.js",
   "repository": "https://gitlab.com/filii-lamberti/addon-filiibot",
-  "author": "Jorim Tielemans",
+  "author": "Filii Lamberti",
   "license": "MIT",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
