@@ -6,7 +6,7 @@
   "author": "Filii Lamberti",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.1.0",
+    "@discordjs/opus": "^0.2.0",
     "axios": "^0.19.2",
     "better-sqlite3": "^7.0.0",
     "discord.js": "^12.2.0",
