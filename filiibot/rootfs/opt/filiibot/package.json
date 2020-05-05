@@ -13,7 +13,7 @@
     "enmap": "^5.2.4",
     "ffmpeg-static": "^4.2.0",
     "humanize-duration": "^3.22.0",
-    "moment": "^2.25.1",
+    "moment": "^2.25.3",
     "mqtt": "^4.0.0",
     "ytdl-core": "^2.1.1"
   },
