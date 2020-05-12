@@ -25,13 +25,13 @@ const util = require('util');
 
 // status of logging
 const { logging } = options;
-// function to filter console logs
-function log(message) {
+// filter console logs
+const log = (message) => {
   if (logging) {
     // eslint-disable-next-line no-console
     console.log(message);
   }
-}
+};
 // prints if logging is true
 if (logging) {
   log('Logging is enabled');
@@ -89,7 +89,7 @@ const Discord = require('discord.js');
 // Create an instance of a Discord client
 const discordClient = new Discord.Client();
 
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 
 // Load Enmap
 const Enmap = require('enmap');
@@ -564,8 +564,8 @@ discordClient.on('message', async (message) => {
         }
 
         voiceChannel.join().then((connection) => {
-          const stream = ytdl('http://www.youtube.com/watch?v=r_0JjYUe5jo', { filter: 'audioonly' });
-          const dispatcher = connection.play(stream);
+          const stream = ytdl('http://www.youtube.com/watch?v=r_0JjYUe5jo');
+          const dispatcher = connection.play(stream, { type: 'opus' });
 
           dispatcher.on('finish', () => voiceChannel.leave());
         });

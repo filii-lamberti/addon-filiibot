@@ -15,7 +15,7 @@
     "humanize-duration": "^3.22.0",
     "moment": "^2.25.3",
     "mqtt": "^4.0.1",
-    "ytdl-core": "^2.1.2"
+    "ytdl-core-discord": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "7.0.0",
