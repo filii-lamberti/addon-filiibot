@@ -564,7 +564,7 @@ discordClient.on('message', async (message) => {
         }
 
         voiceChannel.join().then((connection) => {
-          const stream = ytdl('http://www.youtube.com/watch?v=r_0JjYUe5jo');
+          const stream = ytdl(subcommand);
           const dispatcher = connection.play(stream, { type: 'opus' });
 
           dispatcher.on('finish', () => voiceChannel.leave());
