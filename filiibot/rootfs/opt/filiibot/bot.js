@@ -553,26 +553,9 @@ discordClient.on('message', async (message) => {
         return;
       }
 
-      case 'play': {
-        if (message.channel.type !== 'text') return;
-
-        const voiceChannel = message.member.voice.channel;
-
-        if (!voiceChannel) {
-          message.reply('Please join a voice channel first!');
-          return;
-        }
-
-        voiceChannel.join().then((connection) => {
-          log(`Filiibot plays ${berichtZonderCommando} now.`);
-          const stream = ytdl(berichtZonderCommando, { filter: 'audioonly' });
-          const dispatcher = connection.play(stream);
-
-          dispatcher.on('finish', () => voiceChannel.leave());
-        });
-
+      case 'play':
+        message.reply('play is obsolete, use the `yt play` command instead.');
         return;
-      }
 
       // If the command is 'prune'
       // removes all messages from all users in the channel, up to 100.
@@ -762,6 +745,37 @@ discordClient.on('message', async (message) => {
         message.reply('de welkomsttekst is opnieuw naar je gestuurd.');
         message.member.send(welcomeDm);
         return;
+
+      // If the command is 'god'
+      case 'yt': {
+        if (message.channel.type !== 'text') return;
+
+        const voiceChannel = message.member.voice.channel;
+
+        if (!voiceChannel) {
+          message.reply('Please join a voice channel first!');
+          return;
+        }
+
+        switch (subcommand) {
+          case 'list':
+            return;
+          case 'play':
+            voiceChannel.join().then((connection) => {
+              log(`Filiibot plays ${berichtZonderCommando} now.`);
+              const stream = ytdl(berichtZonderCommando, { filter: 'audioonly' });
+              const dispatcher = connection.play(stream);
+
+              dispatcher.on('finish', () => voiceChannel.leave());
+            });
+
+            return;
+          case 'search':
+            return;
+          default:
+            return;
+        }
+      }
 
       default:
         return;
