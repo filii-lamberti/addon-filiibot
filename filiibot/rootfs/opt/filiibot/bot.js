@@ -90,6 +90,8 @@ const Discord = require('discord.js');
 const discordClient = new Discord.Client();
 
 const ytdl = require('ytdl-core');
+const ytpl = require('ytpl');
+const ytsr = require('ytsr');
 
 // Load Enmap
 const Enmap = require('enmap');
@@ -553,9 +555,40 @@ discordClient.on('message', async (message) => {
         return;
       }
 
-      case 'play':
-        message.reply('play is obsolete, use the `yt play` command instead.');
+      case 'play': {
+        if (message.channel.type !== 'text') return;
+
+        const voiceChannel = message.member.voice.channel;
+
+        if (!voiceChannel) {
+          message.reply('Please join a voice channel first!');
+          return;
+        }
+
+        voiceChannel.join().then((connection) => {
+          if (ytpl.validateURL(berichtZonderSubcommando)) {
+            log('dit is een playlist');
+            // ytpl(berichtZonderSubcommando, (err, playlist) => {
+
+            ytpl('UU_aEa8K-EOJ3D6gOs7HcyNg', (err, playlist) => {
+              if (err) throw err;
+              log(playlist.items);
+
+              const stream = ytdl(playlist.items[0].id, { filter: 'audioonly' });
+              const dispatcher = connection.play(stream);
+
+              dispatcher.on('finish', () => voiceChannel.leave());
+            });
+          } else {
+            log(`Filiibot plays ${berichtZonderSubcommando} now.`);
+            const stream = ytdl(berichtZonderSubcommando, { filter: 'audioonly' });
+            const dispatcher = connection.play(stream);
+
+            dispatcher.on('finish', () => voiceChannel.leave());
+          }
+        });
         return;
+      }
 
       // If the command is 'prune'
       // removes all messages from all users in the channel, up to 100.
@@ -669,27 +702,6 @@ discordClient.on('message', async (message) => {
         }
 
         return;
-
-        /*
-        switch (subsubcommand) {
-          case 'on':
-            // Add the god role!
-            member.roles.add(roleGod);
-            return;
-          case 'off':
-            // Remove a role!
-            member.roles.remove(roleGod);
-            return;
-          default:
-            return;
-
-        // We add the role
-        member.roles.add(role)
-          .then(mbr => log(`Gave the role to ${mbr.displayName}`))
-          // and catch the error
-          .catch(error => message.reply(`kon rol niet toewijzen omdat: ${error}`));
-        return;
-        */
       }
 
       // If the command is 'say'
@@ -706,6 +718,9 @@ discordClient.on('message', async (message) => {
 
         // And we get the bot to say the thing:
         message.channel.send(berichtZonderCommando);
+        return;
+
+      case 'search':
         return;
 
       case 'stop':
@@ -745,37 +760,6 @@ discordClient.on('message', async (message) => {
         message.reply('de welkomsttekst is opnieuw naar je gestuurd.');
         message.member.send(welcomeDm);
         return;
-
-      // If the command is 'god'
-      case 'yt': {
-        if (message.channel.type !== 'text') return;
-
-        const voiceChannel = message.member.voice.channel;
-
-        if (!voiceChannel) {
-          message.reply('Please join a voice channel first!');
-          return;
-        }
-
-        switch (subcommand) {
-          case 'list':
-            return;
-          case 'play':
-            voiceChannel.join().then((connection) => {
-              log(`Filiibot plays ${berichtZonderCommando} now.`);
-              const stream = ytdl(berichtZonderCommando, { filter: 'audioonly' });
-              const dispatcher = connection.play(stream);
-
-              dispatcher.on('finish', () => voiceChannel.leave());
-            });
-
-            return;
-          case 'search':
-            return;
-          default:
-            return;
-        }
-      }
 
       default:
         return;
