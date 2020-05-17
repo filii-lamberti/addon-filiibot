@@ -568,9 +568,8 @@ discordClient.on('message', async (message) => {
         voiceChannel.join().then((connection) => {
           if (ytpl.validateURL(berichtZonderSubcommando)) {
             log('dit is een playlist');
-            // ytpl(berichtZonderSubcommando, (err, playlist) => {
 
-            ytpl('UU_aEa8K-EOJ3D6gOs7HcyNg', (err, playlist) => {
+            ytpl(berichtZonderSubcommando, (err, playlist) => {
               if (err) throw err;
               log(playlist.items);
 
