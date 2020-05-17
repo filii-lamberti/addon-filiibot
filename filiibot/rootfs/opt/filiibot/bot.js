@@ -89,7 +89,7 @@ const Discord = require('discord.js');
 // Create an instance of a Discord client
 const discordClient = new Discord.Client();
 
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('ytdl-core');
 
 // Load Enmap
 const Enmap = require('enmap');
@@ -565,8 +565,8 @@ discordClient.on('message', async (message) => {
 
         voiceChannel.join().then((connection) => {
           log(`Filiibot plays ${berichtZonderCommando} now.`);
-          const stream = ytdl(berichtZonderCommando);
-          const dispatcher = connection.play(stream, { type: 'opus' });
+          const stream = ytdl(berichtZonderCommando, { filter: 'audioonly' });
+          const dispatcher = connection.play(stream);
 
           dispatcher.on('finish', () => voiceChannel.leave());
         });
