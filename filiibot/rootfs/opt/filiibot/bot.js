@@ -559,12 +559,13 @@ discordClient.on('message', async (message) => {
         const voiceChannel = message.member.voice.channel;
 
         if (!voiceChannel) {
-          message.reply('please join a voice channel first!');
+          message.reply('Please join a voice channel first!');
           return;
         }
 
         voiceChannel.join().then((connection) => {
-          const stream = ytdl(subcommand);
+          log(`Filiibot plays ${berichtZonderCommando} now.`);
+          const stream = ytdl(berichtZonderCommando);
           const dispatcher = connection.play(stream, { type: 'opus' });
 
           dispatcher.on('finish', () => voiceChannel.leave());
