@@ -566,10 +566,17 @@ discordClient.on('message', async (message) => {
         }
 
         voiceChannel.join().then((connection) => {
-          if (ytpl.validateURL(berichtZonderSubcommando)) {
+          if (ytdl.validateURL(berichtZonderCommando)
+              || ytdl.validateID(berichtZonderCommando)) {
+            log(`Filiibot plays ${berichtZonderCommando} now.`);
+            const stream = ytdl(berichtZonderCommando, { filter: 'audioonly' });
+            const dispatcher = connection.play(stream);
+
+            dispatcher.on('finish', () => voiceChannel.leave());
+          } else if (ytpl.validateURL(berichtZonderCommando)) {
             log('dit is een playlist');
 
-            ytpl(berichtZonderSubcommando, (err, playlist) => {
+            ytpl(berichtZonderCommando, (err, playlist) => {
               if (err) throw err;
               log(playlist.items);
 
@@ -579,11 +586,14 @@ discordClient.on('message', async (message) => {
               dispatcher.on('finish', () => voiceChannel.leave());
             });
           } else {
-            log(`Filiibot plays ${berichtZonderSubcommando} now.`);
-            const stream = ytdl(berichtZonderSubcommando, { filter: 'audioonly' });
-            const dispatcher = connection.play(stream);
+            const searchOptions = {
+              limit: 5,
+            };
 
-            dispatcher.on('finish', () => voiceChannel.leave());
+            ytsr(berichtZonderCommando, searchOptions, (err, searchResults) => {
+              if (err) throw err;
+              log(searchResults);
+            });
           }
         });
         return;
