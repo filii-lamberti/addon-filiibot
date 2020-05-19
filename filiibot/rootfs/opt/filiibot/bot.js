@@ -91,6 +91,7 @@ const discordClient = new Discord.Client();
 discordClient.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 for (const file of commandFiles) {
+  // eslint-disable-next-line global-require, import/no-dynamic-require
   const command = require(`./commands/${file}`);
   discordClient.commands.set(command.name, command);
 }
@@ -554,7 +555,8 @@ discordClient.on('message', async (message) => {
       // The second ping is an average latency between the bot and the websocket server
       // (one-way, not round-trip)
       case 'ping':
-        client.commands.get('ping').execute(message, args);
+        discordClient.commands.get('ping').execute(message);// , args
+        return;
 
       case 'play': {
         if (message.channel.type !== 'text') return;
