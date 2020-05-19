@@ -45,13 +45,13 @@ if (debugging) {
   process.env.DEBUG = '*';
 }
 
-// the token of your bot
-const { token } = options;
-// the message prefix
-const { prefix } = options;
+// the message prefix and token of your bot
+const { prefix, token } = options;
 
-log(`Token: ${token}`);
-log(`Prefix: ${prefix}`);
+log(`
+  Prefix: ${prefix}
+  Token: ${token}
+`);
 
 // Gebruikt voor momenten
 const moment = require('moment');
@@ -88,6 +88,12 @@ process.on('unhandledRejection', (error) => console.error('Uncaught Promise Reje
 const Discord = require('discord.js');
 // Create an instance of a Discord client
 const discordClient = new Discord.Client();
+discordClient.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
+for (const file of commandFiles) {
+  const command = require(`./commands/${file}`);
+  discordClient.commands.set(command.name, command);
+}
 
 const ytdl = require('ytdl-core');
 const ytpl = require('ytpl');
@@ -547,13 +553,8 @@ discordClient.on('message', async (message) => {
       // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
       // The second ping is an average latency between the bot and the websocket server
       // (one-way, not round-trip)
-      case 'ping': {
-        const m = await message.channel.send('Ping?');
-        m.edit(
-          `Pong! Wachttijd is ${m.createdTimestamp - message.createdTimestamp}ms. API wachttijd is ${Math.round(discordClient.ws.ping)}ms`,
-        );
-        return;
-      }
+      case 'ping':
+        client.commands.get('ping').execute(message, args);
 
       case 'play': {
         if (message.channel.type !== 'text') return;
