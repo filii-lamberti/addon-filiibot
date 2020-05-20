@@ -11,7 +11,7 @@
     "better-sqlite3": "^7.0.1",
     "discord.js": "^12.2.0",
     "enmap": "^5.2.4",
-    "ffmpeg-static": "^4.2.1",
+    "ffmpeg-static": "^4.2.2",
     "humanize-duration": "^3.22.0",
     "moment": "^2.25.3",
     "mqtt": "^4.0.1",
