@@ -364,7 +364,7 @@ discordClient.on('guildMemberUpdate', (oldMember, newMember) => {
 
 // This event will run on every single message received, from any channel or DM.
 discordClient.on('message', async (message) => {
-  args = [];
+  const args = [];
   // Negeren als het bericht van een bot komt
   if (message.author.bot) return;
 
