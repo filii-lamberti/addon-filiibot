@@ -364,6 +364,7 @@ discordClient.on('guildMemberUpdate', (oldMember, newMember) => {
 
 // This event will run on every single message received, from any channel or DM.
 discordClient.on('message', async (message) => {
+  args = [];
   // Negeren als het bericht van een bot komt
   if (message.author.bot) return;
 
@@ -499,9 +500,8 @@ discordClient.on('message', async (message) => {
         message.reply(filiikot.statusMessage);
         return;
 
-      // If the command is 'foo'
       case 'foo':
-        message.channel.send('bar!');
+        discordClient.commands.get('foo').execute(message, args);
         return;
 
       // If the command is 'god'
@@ -550,12 +550,8 @@ discordClient.on('message', async (message) => {
         return;
       }
 
-      // If the command is 'ping'
-      // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
-      // The second ping is an average latency between the bot and the websocket server
-      // (one-way, not round-trip)
       case 'ping':
-        discordClient.commands.get('ping').execute(message);// , args
+        discordClient.commands.get('ping').execute(message, args);
         return;
 
       case 'play': {

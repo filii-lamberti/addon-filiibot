@@ -1,11 +1,17 @@
+/*
+ * If the command is 'ping'
+ * Calculates ping between sending a message and editing it, giving a nice round-trip latency.
+ * The second ping is an average latency between the bot and the websocket server
+ * (one-way, not round-trip)
+ */
 module.exports = {
   name: 'ping',
   description: 'Ping!',
   async execute(message, args) {
-    message.channel.send('Pong.');
     const m = await message.channel.send('Ping?');
     m.edit(
-      `Pong! Wachttijd is ${m.createdTimestamp - message.createdTimestamp}ms. API wachttijd is ${Math.round(discordClient.ws.ping)}ms`,
+      `Pong! Wachttijd is ${m.createdTimestamp - message.createdTimestamp}ms,
+      API wachttijd is ${Math.round(message.client.ws.ping)}ms.`
     );
   },
 };
