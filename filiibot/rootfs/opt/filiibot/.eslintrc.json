@@ -7,6 +7,12 @@
       "LabeledStatement",
       "WithStatement"
     ],
-    "import/no-unresolved": "off"
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ]
   }
 }
