@@ -19,7 +19,7 @@ RUN \
         build-base=0.5-r2 \
         npm=12.17.0-r0 \
         python2=2.7.18-r0 \
-        yarn=1.19.2-r0 \
+        yarn=1.22.4-r0 \
     \
     && apk add --no-cache \
         ffmpeg=4.2.1-r3 \
