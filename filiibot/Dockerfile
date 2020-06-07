@@ -23,7 +23,7 @@ RUN \
     \
     && apk add --no-cache \
         ffmpeg=4.2.3-r0 \
-        nodejs=12.15.0-r1 \
+        nodejs=12.17.0-r0 \
     \
     && cd /opt/filiibot \
     \
