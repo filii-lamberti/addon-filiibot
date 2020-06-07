@@ -22,7 +22,7 @@ RUN \
         yarn=1.22.4-r0 \
     \
     && apk add --no-cache \
-        ffmpeg=4.2.1-r3 \
+        ffmpeg=4.2.3-r0 \
         nodejs=12.15.0-r1 \
     \
     && cd /opt/filiibot \
