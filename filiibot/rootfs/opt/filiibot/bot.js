@@ -21,7 +21,6 @@ if (!supervisorToken) {
 
 // Lees de externe file
 const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
-const { version } = require('./package.json');
 const util = require('util');
 
 // status of logging
@@ -131,6 +130,8 @@ client.mqtt.options = {
 };
 // Connect to the local MQTT broker
 client.mqtt.client = MQTT.connect(options.mqttBrokerUrl, client.mqtt.options);
+
+const { version } = require('./package.json');
 
 client.mqtt.client.on('connect', () => { // When connected
   log('MQTT connected');
@@ -378,7 +379,7 @@ client.on('message', async (message) => {
   const messageSliced = messageTrimmed.slice(prefix.length);
   // To get the "message" itself we join the array back into a string with spaces
   const args = messageSliced.split(/\s+/g);
-	const commandName = args.shift().toLowerCase();
+  const commandName = args.shift().toLowerCase();
 
   // Negeren als het een DM is
   if (message.channel.type !== 'text') {

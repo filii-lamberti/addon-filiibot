@@ -7,11 +7,11 @@
 module.exports = {
   name: 'ping',
   description: 'Ping!',
-  async execute(message, args) {
+  async execute(message, _args) {
     const m = await message.channel.send('Ping?');
     m.edit(
       `Pong! Wachttijd is ${m.createdTimestamp - message.createdTimestamp}ms,
-      API wachttijd is ${Math.round(message.client.ws.ping)}ms.`
+      API wachttijd is ${Math.round(message.client.ws.ping)}ms.`,
     );
   },
 };
