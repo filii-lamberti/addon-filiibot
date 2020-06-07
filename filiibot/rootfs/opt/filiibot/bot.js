@@ -21,6 +21,7 @@ if (!supervisorToken) {
 
 // Lees de externe file
 const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
+const { version } = require('./package.json');
 const util = require('util');
 
 // status of logging
@@ -53,22 +54,9 @@ log(`
   Token: ${token}
 `);
 
-// Gebruikt voor momenten
-const moment = require('moment');
-const humanizeDuration = require('humanize-duration');
-// Set the locale to dutch
-moment.locale('nl');
-
-const filiikot = {
-  humidity: 0,
-  lastChanged: moment(0),
-  lastUpdated: moment(0),
-  people: 0,
-  peopleNames: [],
-  state: 'false',
-  statusMessage: 'met de gevoelens van het filiikot',
-  temperature: 0,
-};
+const ytdl = require('ytdl-core');
+const ytpl = require('ytpl');
+const ytsr = require('ytsr');
 
 // HTTP REST API
 const axios = require('axios');
@@ -87,115 +75,132 @@ process.on('unhandledRejection', (error) => console.error('Uncaught Promise Reje
 // Load up the discord.js library
 const Discord = require('discord.js');
 // Create an instance of a Discord client
-const discordClient = new Discord.Client();
-discordClient.commands = new Discord.Collection();
+const client = new Discord.Client();
+client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 for (const file of commandFiles) {
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const command = require(`./commands/${file}`);
-  discordClient.commands.set(command.name, command);
+  client.commands.set(command.name, command);
 }
 
-const ytdl = require('ytdl-core');
-const ytpl = require('ytpl');
-const ytsr = require('ytsr');
+// Gebruikt voor momenten
+const moment = require('moment');
+const humanizeDuration = require('humanize-duration');
+// Set the locale to dutch
+moment.locale('nl');
+
+client.filiikot = {
+  humidity: 0,
+  lastChanged: moment(0),
+  lastUpdated: moment(0),
+  people: 0,
+  peopleNames: [],
+  state: 'false',
+  statusMessage: 'met de gevoelens van het filiikot',
+  temperature: 0,
+};
 
 // Load Enmap
+client.enmap = {};
 const Enmap = require('enmap');
-// Normal enmap with default options but custom data location
-discordClient.people = new Enmap({
+// Enmap options
+client.enmap.options = {
   name: 'people',
   dataDir: options.enmapDataDir,
   ensureProps: true,
-});
+};
+// Normal enmap with default options but custom data location
+client.enmap.people = new Enmap(client.enmap.options);
 
 // Wait for data to load
-discordClient.people.defer.then(() => {
-  log(`${discordClient.people.size} keys loaded`);
+client.enmap.people.defer.then(() => {
+  log(`${client.enmap.people.size} keys loaded`);
   // Log our bot in
-  discordClient.login(token);
+  client.login(token);
 });
 
-const mqttOptions = {
+// MQTT
+client.mqtt = {};
+const MQTT = require('mqtt');
+// MQTT options
+client.mqtt.options = {
   clientId: 'mqttjs_filiibot',
   username: 'ferre',
   password: 'ferre',
 };
-
-// MQTT
-const MQTT = require('mqtt');
 // Connect to the local MQTT broker
-const mqttClient = MQTT.connect(options.mqttBrokerUrl, mqttOptions);
+client.mqtt.client = MQTT.connect(options.mqttBrokerUrl, client.mqtt.options);
 
-mqttClient.on('connect', () => { // When connected
+client.mqtt.client.on('connect', () => { // When connected
   log('MQTT connected');
   // subscribe to a topic
-  mqttClient.subscribe('filiikot/+');
+  client.mqtt.client.subscribe('filiikot/+');
   // Inform controllers that garage is connected
-  mqttClient.publish('filiikot/filiibot_connected', 'true');
+  client.mqtt.client.publish('filiikot/filiibot_connected', 'true');
 });
 
-mqttClient.on('message', (topic, message) => {
+client.mqtt.client.on('message', (topic, message) => {
   switch (topic) {
     case 'filiikot/humidity':
-      filiikot.humidity = message.toString();
-      log(`Vochtigheid: ${filiikot.humidity}`);
+      client.filiikot.humidity = message.toString();
+      log(`Vochtigheid: ${client.filiikot.humidity}`);
       break;
 
     case 'filiikot/last_changed':
-      filiikot.lastChanged = moment(message.toString());
-      log(`Last changed: ${filiikot.lastChanged}`);
+      client.filiikot.lastChanged = moment(message.toString());
+      log(`Last changed: ${client.filiikot.lastChanged}`);
       break;
 
     case 'filiikot/last_updated':
-      filiikot.lastUpdated = moment(message.toString());
-      log(`Last updated: ${filiikot.lastUpdated}`);
+      client.filiikot.lastUpdated = moment(message.toString());
+      log(`Last updated: ${client.filiikot.lastUpdated}`);
       break;
 
     case 'filiikot/people_names':
-      filiikot.peopleNames = message.toString().split(',');
-      log(`People names: ${filiikot.peopleNames}`);
+      client.filiikot.peopleNames = message.toString().split(',');
+      log(`People names: ${client.filiikot.peopleNames}`);
       break;
 
     case 'filiikot/people':
-      filiikot.people = message.toString();
-      log(`People: ${filiikot.people}`);
+      client.filiikot.people = message.toString();
+      log(`People: ${client.filiikot.people}`);
       break;
 
     case 'filiikot/state':
       // message is Buffer
-      filiikot.state = message.toString();
-      log(`Status: ${filiikot.state}`);
+      client.filiikot.state = message.toString();
+      log(`Status: ${client.filiikot.state}`);
       break;
 
     case 'filiikot/temperature':
-      filiikot.temperature = message.toString();
-      log(`Temperatuur: ${filiikot.temperature}`);
+      client.filiikot.temperature = message.toString();
+      log(`Temperatuur: ${client.filiikot.temperature}`);
       break;
 
     default:
       return;
   }
 
-  switch (filiikot.state) {
+  switch (client.filiikot.state) {
     case 'true':
-      filiikot.statusMessage = `✅ Het filiikot is open sinds ${filiikot.lastChanged.format('HH:mm')}`;
+      client.filiikot.statusMessage = `✅ Het filiikot is open sinds ${client.filiikot.lastChanged.format('HH:mm')}`;
       break;
 
     case 'false':
-      filiikot.statusMessage = `🛑 Het filiikot is al ${filiikot.lastChanged.fromNow(true)} gesloten`;
+      client.filiikot.statusMessage = `🛑 Het filiikot is al ${client.filiikot.lastChanged.fromNow(true)} gesloten`;
       break;
 
     default:
-      filiikot.statusMessage = 'met de gevoelens van het filiikot';
+      client.filiikot.statusMessage = 'met de gevoelens van het filiikot';
       break;
   }
 
   // Set the client user's activity
-  if (discordClient.readyTimestamp) {
+  if (client.readyTimestamp) {
     // the client is ready
-    discordClient.user
-      .setActivity(filiikot.statusMessage, {
+    client.user
+      .setActivity(client.filiikot.statusMessage, {
         url: 'https://ishetfiliikotopen.be/',
         type: 'PLAYING',
       })
@@ -204,8 +209,6 @@ mqttClient.on('message', (topic, message) => {
       .catch((error) => log(`Kon activity niet updaten omdat: ${error}`));
   }
 });
-
-const { version } = require('./package.json');
 
 // Is the message author part of Praesidium?
 const isMemberPraesidium = (message) => {
@@ -224,12 +227,12 @@ const isMemberServerGod = (message) => {
 const afkSet = (member, reason = ':zzz:') => {
   // Set the nickname for this member.
   member
-    .setNickname(`[AFK] ${discordClient.people.get(member.id, 'name')}`)
+    .setNickname(`[AFK] ${client.enmap.people.get(member.id, 'name')}`)
     .then((mbr) => {
       log(`Changed the AFK nickname to ${mbr.nickname}`);
-      discordClient.people.push('afkMembers', member.id);
-      discordClient.people.set(member.id, true, 'afk');
-      discordClient.people.set(member.id, reason, 'reason');
+      client.enmap.people.push('afkMembers', member.id);
+      client.enmap.people.set(member.id, true, 'afk');
+      client.enmap.people.set(member.id, reason, 'reason');
     })
     // catch delete error
     .catch((error) => log(`Kon nickname niet veranderen omdat: ${error}`));
@@ -238,12 +241,12 @@ const afkSet = (member, reason = ':zzz:') => {
 const afkClear = (member) => {
   // Set the nickname for this member.
   member
-    .setNickname(discordClient.people.get(member.id, 'name'))
+    .setNickname(client.enmap.people.get(member.id, 'name'))
     .then((mbr) => {
       log(`Changed the nickname back to ${mbr.nickname}`);
-      discordClient.people.remove('afkMembers', member.id);
-      discordClient.people.set(member.id, false, 'afk');
-      discordClient.people.set(member.id, '', 'reason');
+      client.enmap.people.remove('afkMembers', member.id);
+      client.enmap.people.set(member.id, false, 'afk');
+      client.enmap.people.set(member.id, '', 'reason');
     })
     // catch delete error
     .catch((error) => log(`Kon nickname niet veranderen omdat: ${error}`));
@@ -270,24 +273,24 @@ const clean = (text) => {
 
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord _after_ ready is emitted
-discordClient.on('ready', () => {
+client.on('ready', () => {
   // This event will run if the bot starts, and logs in, successfully.
-  log(`Bot is klaar, ik ben ingelogd als ${discordClient.user.tag}!`);
+  log(`Bot is klaar, ik ben ingelogd als ${client.user.tag}!`);
   // Should only have 1 guild
   log(
-    `Serving ${discordClient.users.cache.size} users
-    in ${discordClient.channels.cache.size} channels
-    of ${discordClient.guilds.cache.size} server.`,
+    `Serving ${client.users.cache.size} users
+    in ${client.channels.cache.size} channels
+    of ${client.guilds.cache.size} server.`,
   );
 
   // Change the bot's playing game to something useless
-  discordClient.user.setActivity('met de gevoelens van het filiikot');
+  client.user.setActivity('met de gevoelens van het filiikot');
 
   // Get the Filii Guild by ID from all Guilds
-  const filiiGuild = discordClient.guilds.cache.get('238704983468539905');
+  const filiiGuild = client.guilds.cache.get('238704983468539905');
   // Check for all members from the Filii Guild
   for (const [key, value] of filiiGuild.members.cache) {
-    discordClient.people.ensure(key, {
+    client.enmap.people.ensure(key, {
       id: key,
       name: value.displayName,
       afk: false,
@@ -298,30 +301,30 @@ discordClient.on('ready', () => {
       searchResult: [],
     });
   }
-  discordClient.people.ensure('afkMembers', []);
+  client.enmap.people.ensure('afkMembers', []);
 });
 
-discordClient.on('error', (error) => {
+client.on('error', (error) => {
   log(error);
-  discordClient.people.close();
-  mqttClient.end();
+  client.enmap.people.close();
+  client.mqtt.client.end();
   process.exit(1);
 });
 
 // This event triggers when the bot joins a guild.
-discordClient.on('guildCreate', (guild) => {
+client.on('guildCreate', (guild) => {
   log(
     `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
   );
 });
 
 // this event triggers when the bot is removed from a guild.
-discordClient.on('guildDelete', (guild) => {
+client.on('guildDelete', (guild) => {
   log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
 });
 
 // Create an event listener for new guild members
-discordClient.on('guildMemberAdd', (member) => {
+client.on('guildMemberAdd', (member) => {
   log(`New User "${member.displayName}" has joined "${member.guild.name}"`);
   // If the joined member is a bot, do nothing.
   if (member.user.bot) return;
@@ -337,7 +340,7 @@ discordClient.on('guildMemberAdd', (member) => {
   member.send(welcomeDm);
 });
 
-discordClient.on('guildMemberRemove', (member) => {
+client.on('guildMemberRemove', (member) => {
   log(`User "${member.displayName}" has left "${member.guild.name}"`);
   // If the joined member is a bot, do nothing.
   if (member.user.bot) return;
@@ -349,7 +352,7 @@ discordClient.on('guildMemberRemove', (member) => {
   welcomeChannel.send(`Vaarwel, ${member}, u joinde ${moment(member.joinedAt).fromNow()}.`);
 });
 
-discordClient.on('guildMemberUpdate', (oldMember, newMember) => {
+client.on('guildMemberUpdate', (oldMember, newMember) => {
   // If the nickname is the same, was [AFK] or is [AFK], do nothing.
   if (
     oldMember.nickname === newMember.nickname
@@ -359,11 +362,11 @@ discordClient.on('guildMemberUpdate', (oldMember, newMember) => {
     || oldMember.nickname.substring(0, 6) === '[AFK] '
   ) return;
   log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
-  discordClient.people.set(newMember.id, newMember.displayName, 'name');
+  client.enmap.people.set(newMember.id, newMember.displayName, 'name');
 });
 
 // This event will run on every single message received, from any channel or DM.
-discordClient.on('message', async (message) => {
+client.on('message', async (message) => {
   const args = [];
   // Negeren als het bericht van een bot komt
   if (message.author.bot) return;
@@ -376,7 +379,7 @@ discordClient.on('message', async (message) => {
     return;
   }
 
-  const afkMembers = discordClient.people.get('afkMembers');
+  const afkMembers = client.enmap.people.get('afkMembers');
   if (afkMembers.includes(message.author.id)) {
     afkClear(message.member);
   }
@@ -395,7 +398,7 @@ discordClient.on('message', async (message) => {
   const mentionedMembers = message.mentions.members;
   const mentionedAfkMembers = afkMembers.filter((element) => mentionedMembers.has(element));
   mentionedAfkMembers.forEach((element) => {
-    message.reply(`${discordClient.people.get(element, 'name')} is momenteel AFK met als reden: "${discordClient.people.get(element, 'reason')}".`);
+    message.reply(`${client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${client.enmap.people.get(element, 'reason')}".`);
   });
 
   // Otherwise check if the prefix is there
@@ -428,7 +431,7 @@ discordClient.on('message', async (message) => {
 
       // If the command is 'codex'
       case 'codex': {
-        const searchResult = discordClient.people.get(message.member.id, 'searchResult');
+        const searchResult = client.enmap.people.get(message.member.id, 'searchResult');
 
         if (searchResult.length === 0) {
           // subcommand = page
@@ -441,7 +444,7 @@ discordClient.on('message', async (message) => {
               log(response);
               log(response.data);
               // handle success
-              discordClient.people.set(message.member.id, response.data, 'searchResult');
+              client.enmap.people.set(message.member.id, response.data, 'searchResult');
 
               let bericht;
               bericht = 'Maak alstublieft een selectie:\n';
@@ -460,7 +463,7 @@ discordClient.on('message', async (message) => {
         } else {
           log(`Selecting song ${subcommand} of searchResult`);
           message.reply(searchResult[subcommand].item.html.text);
-          discordClient.people.set(message.member.id, [], 'searchResult');
+          client.enmap.people.set(message.member.id, [], 'searchResult');
           log('Clearing searchResult');
         }
         /*
@@ -474,10 +477,10 @@ discordClient.on('message', async (message) => {
       }
 
       // Used to test things, examples below
-      // discordClient.emit('guildMemberAdd', member);
-      // discordClient.emit('guildMemberRemove', member);
-      // discordClient.emit('guildCreate', message.guild);
-      // discordClient.emit('guildDelete', message.guild);
+      // client.emit('guildMemberAdd', member);
+      // client.emit('guildMemberRemove', member);
+      // client.emit('guildCreate', message.guild);
+      // client.emit('guildDelete', message.guild);
       case 'eval':
         if (!isMemberServerGod(message)) return;
 
@@ -497,11 +500,11 @@ discordClient.on('message', async (message) => {
 
       // If the command is 'fk'
       case 'fk':
-        message.reply(filiikot.statusMessage);
+        message.reply(client.filiikot.statusMessage);
         return;
 
       case 'foo':
-        discordClient.commands.get('foo').execute(message, args);
+        client.commands.get('foo').execute(message, args);
         return;
 
       // If the command is 'god'
@@ -530,11 +533,11 @@ discordClient.on('message', async (message) => {
 
       case 'ls': {
         let bericht;
-        if (filiikot.people === '0') {
+        if (client.filiikot.people === '0') {
           bericht = 'er is momenteel niemand aanwezig.';
         } else {
           bericht = 'aanwezig:';
-          filiikot.peopleNames.forEach((name) => {
+          client.filiikot.peopleNames.forEach((name) => {
             bericht += `\n- ${name}`;
           });
         }
@@ -551,7 +554,7 @@ discordClient.on('message', async (message) => {
       }
 
       case 'ping':
-        discordClient.commands.get('ping').execute(message, args);
+        client.commands.get('ping').execute(message, args);
         return;
 
       case 'play': {
@@ -750,7 +753,7 @@ discordClient.on('message', async (message) => {
 
       case 'up':
         message.channel.send(
-          `Uptime is ${humanizeDuration(discordClient.uptime, {
+          `Uptime is ${humanizeDuration(client.uptime, {
             language: 'nl',
             conjunction: ' en ',
             serialComma: false,
