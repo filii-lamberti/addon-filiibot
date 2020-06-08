@@ -9,7 +9,7 @@ module.exports = {
     message.client.log('Stopping add-on');
     message.reply('shutting down...');
 
-    message.client.request.supervisor.post('addons/self/stop')
+    message.client.supervisorRequest.post('addons/self/stop')
       .then((response) => {
         // handle success
         message.client.log(response.data);

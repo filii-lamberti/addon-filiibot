@@ -58,9 +58,8 @@ client.log(`
 
 // HTTP REST API
 const axios = require('axios');
-client.request = {};
 // Supervisor REST API
-client.request.supervisor = axios.create({
+client.supervisorRequest = axios.create({
   baseURL: 'http://supervisor/',
   headers: {
     Authorization: `Bearer ${supervisorToken}`,
