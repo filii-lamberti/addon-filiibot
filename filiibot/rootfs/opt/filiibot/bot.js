@@ -394,21 +394,23 @@ client.on('message', async (message) => {
   const command = client.commands.get(commandName);
   // Negeren als het een DM is
   if (command.guildOnly && message.channel.type !== 'text') {
-    return message.reply(
+    message.reply(
       'Het spijt me zeer, maar ik ben momenteel niet geïnteresseerd in persoonlijke relaties. Ik heb mijn handen al vol met Filii te dienen!',
     );
+    return;
   }
   if (command.args && !args.length) {
     let reply = `You didn't provide any arguments, ${message.author}!`;
     if (command.usage) {
       reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
     }
-    return message.channel.send(reply);
+    message.channel.send(reply);
+    return;
   }
   try {
     command.execute(message, args);
   } catch (error) {
-    console.error(error);
+    client.log(error);
     message.reply('there was an error trying to execute that command!');
   }
 });
