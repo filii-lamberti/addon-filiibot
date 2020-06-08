@@ -9,7 +9,7 @@ module.exports = {
     message.client.log('Restarting add-on');
     message.reply('rebooting bot...');
 
-    supervisorRequest.post('addons/self/restart')
+    message.client.request.supervisor.post('addons/self/restart')
       .then((response) => {
         // handle success
         message.client.log(response.data);

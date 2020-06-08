@@ -7,7 +7,7 @@ module.exports = {
   execute(message, args) {
     if (!message.client.member.praesidium(message)) return;
     // The user you want to add a role to
-    const member = client.member.which(message);
+    const member = message.client.member.which(message);
 
     message.client.log('Ever wanted to be a god?');
     const roleGod = message.guild.roles.cache.find((role) => role.name === 'Server God');
@@ -24,8 +24,6 @@ module.exports = {
         // Remove a role!
         member.roles.remove(roleGod);
         break;
-      default:
-        return;
     }
   },
 };

@@ -2,8 +2,6 @@
  * If the command is 'up'
  */
 const humanizeDuration = require('humanize-duration');
-// Set the locale to dutch
-moment.locale('nl');
 
 module.exports = {
   name: 'up',

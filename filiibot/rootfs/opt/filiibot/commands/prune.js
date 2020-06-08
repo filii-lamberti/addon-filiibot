@@ -20,7 +20,5 @@ module.exports = {
       .then((messages) => message.client.log(`Bulk deleted ${messages.size} messages`))
       // catch delete error
       .catch((error) => message.reply(`kon berichten niet verwijderen omdat: ${error}`));
-
-    return;
   },
 };

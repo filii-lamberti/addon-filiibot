@@ -19,8 +19,10 @@ if (!supervisorToken) {
   options.mqttBrokerUrl = 'mqtt://core-mosquitto';
 }
 
-// Lees de externe file
-const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
+// Load up the discord.js library
+const Discord = require('discord.js');
+// Create an instance of a Discord client
+const client = new Discord.Client();
 
 // status of logging
 const { logging } = options;
@@ -54,8 +56,9 @@ client.log(`
 
 // HTTP REST API
 const axios = require('axios');
+client.request = {};
 // Supervisor REST API
-const supervisorRequest = axios.create({
+client.request.supervisor = axios.create({
   baseURL: 'http://supervisor/',
   headers: {
     Authorization: `Bearer ${supervisorToken}`,
@@ -66,10 +69,6 @@ const supervisorRequest = axios.create({
 // eslint-disable-next-line no-console
 process.on('unhandledRejection', (error) => console.error('Uncaught Promise Rejection', error));
 
-// Load up the discord.js library
-const Discord = require('discord.js');
-// Create an instance of a Discord client
-const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -80,6 +79,8 @@ for (const file of commandFiles) {
 
 // Gebruikt voor momenten
 const moment = require('moment');
+// Set the locale to dutch
+moment.locale('nl');
 
 client.filiikot = {
   humidity: 0,
@@ -387,8 +388,7 @@ client.on('message', async (message) => {
     return;
   }
 
-  const mentionedMembers = message.mentions.members;
-  const mentionedAfkMembers = afkMembers.filter((element) => mentionedMembers.has(element));
+  const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
   mentionedAfkMembers.forEach((element) => {
     message.reply(`${client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${client.enmap.people.get(element, 'reason')}".`);
   });

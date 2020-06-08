@@ -1,6 +1,8 @@
 /*
  * If the command is 'codex'
  */
+const axios = require('axios');
+
 module.exports = {
   name: 'codex',
   description: 'Codex!',

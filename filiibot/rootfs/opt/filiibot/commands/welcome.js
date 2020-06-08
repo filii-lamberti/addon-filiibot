@@ -1,6 +1,9 @@
 /*
  * If the command is 'welcome'
  */
+// Lees de externe file
+const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
+
 module.exports = {
   name: 'welcome',
   description: 'Welcome!',

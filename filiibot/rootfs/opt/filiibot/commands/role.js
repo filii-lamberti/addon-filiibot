@@ -7,6 +7,8 @@ module.exports = {
   execute(message, args) {
     if (!message.client.member.praesidium(message)) return;
 
+    const mentionedMembers = message.mentions.members;
+
     message.client.log('Doing some roleplay?');
     // Can't use the next thing because otherwise they would get notified
     // let role = message.mentions.roles.cache.first();
