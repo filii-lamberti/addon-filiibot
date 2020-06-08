@@ -1,5 +1,10 @@
-// If the command is 'codex'
-case 'codex': {
+/*
+ * If the command is 'codex'
+ */
+module.exports = {
+  name: 'codex',
+  description: 'Codex!',
+  execute(message, args) {
     const searchResult = client.enmap.people.get(message.member.id, 'searchResult');
 
     if (searchResult.length === 0) {
@@ -42,5 +47,5 @@ case 'codex': {
     }`,
     );
     */
-    break;
-}
+  },
+};

@@ -1,5 +1,11 @@
-// If the command is 'welcome'
-case 'welcome':
-  message.reply('de welkomsttekst is opnieuw naar je gestuurd.');
-  message.member.send(welcomeDm);
-  break;
+/*
+ * If the command is 'welcome'
+ */
+module.exports = {
+  name: 'welcome',
+  description: 'Welcome!',
+  execute(message, _args) {
+    message.reply('de welkomsttekst is opnieuw naar je gestuurd.');
+    message.member.send(welcomeDm);
+  },
+};

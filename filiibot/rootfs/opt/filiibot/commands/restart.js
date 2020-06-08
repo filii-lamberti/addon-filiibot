@@ -1,6 +1,11 @@
-// If the command is 'restart'
-case 'restart':
-    if (!isMemberServerGod(message)) return;
+/*
+ * If the command is 'restart'
+ */
+module.exports = {
+  name: 'restart',
+  description: 'Restart!',
+  execute(message, _args) {
+    if (!message.client.member.serverGod(message)) return;
     log('Restarting add-on');
     message.reply('rebooting bot...');
 
@@ -14,4 +19,5 @@ case 'restart':
         // handle error
         log(`Error: ${error}`);
     });
-    break;
+  },
+};

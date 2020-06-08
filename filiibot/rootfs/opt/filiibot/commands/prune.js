@@ -1,7 +1,12 @@
-// If the command is 'prune'
-// removes all messages from all users in the channel, up to 100.
-case 'prune': {
-    if (!isMemberPraesidium(message)) return;
+/*
+ * If the command is 'prune'
+ * removes all messages from all users in the channel, up to 100.
+ */
+module.exports = {
+  name: 'prune',
+  description: 'Prune!',
+  execute(message, args) {
+    if (!message.client.member.praesidium(message)) return;
 
     // get the delete count, as an actual number.
     const amount = parseInt(args[0].toLowerCase(), 10) + 1;
@@ -17,4 +22,5 @@ case 'prune': {
     .catch((error) => message.reply(`kon berichten niet verwijderen omdat: ${error}`));
 
     return;
-}
+  },
+};

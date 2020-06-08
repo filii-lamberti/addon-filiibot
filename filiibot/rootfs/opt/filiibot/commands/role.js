@@ -1,6 +1,11 @@
-// If the command is 'role'
-case 'role': {
-    if (!isMemberPraesidium(message)) return;
+/*
+ * If the command is 'role'
+ */
+module.exports = {
+  name: 'role',
+  description: 'Role!',
+  execute(message, args) {
+    if (!message.client.member.praesidium(message)) return;
 
     log('Doing some roleplay?');
     // Can't use the next thing because otherwise they would get notified
@@ -64,6 +69,5 @@ case 'role': {
     default:
         return;
     }
-
-    break;
-}
+  },
+};

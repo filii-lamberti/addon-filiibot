@@ -1,10 +1,15 @@
-// Used to test things, examples below
-// client.emit('guildMemberAdd', member);
-// client.emit('guildMemberRemove', member);
-// client.emit('guildCreate', message.guild);
-// client.emit('guildDelete', message.guild);
-case 'eval':
-    if (!isMemberServerGod(message)) return;
+/*
+ * Used to test things, examples below
+ * client.emit('guildMemberAdd', member);
+ * client.emit('guildMemberRemove', member);
+ * client.emit('guildCreate', message.guild);
+ * client.emit('guildDelete', message.guild);
+ */
+module.exports = {
+  name: 'eval',
+  description: 'Eval!',
+  execute(message, args) {
+    if (!message.client.member.serverGod(message)) return;
 
     try {
     // eslint-disable-next-line no-eval
@@ -18,4 +23,5 @@ case 'eval':
     } catch (error) {
     message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
     }
-    break;
+  },
+};

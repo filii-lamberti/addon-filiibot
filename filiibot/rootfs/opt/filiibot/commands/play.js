@@ -1,4 +1,10 @@
-case 'play': {
+/*
+ * If the command is 'play'
+ */
+module.exports = {
+  name: 'play',
+  description: 'Play!',
+  execute(message, args) {
     if (message.channel.type !== 'text') return;
 
     const voiceChannel = message.member.voice.channel;
@@ -39,5 +45,5 @@ case 'play': {
         });
     }
     });
-    break;
-}
+  },
+};

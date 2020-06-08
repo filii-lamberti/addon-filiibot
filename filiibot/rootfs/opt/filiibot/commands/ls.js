@@ -1,7 +1,13 @@
-case 'ls': {
+/*
+ * If the command is 'ls'
+ */
+module.exports = {
+  name: 'ls',
+  description: 'Ls!',
+  execute(message, _args) {
     let bericht;
     if (client.filiikot.people === '0') {
-    bericht = 'er is momenteel niemand aanwezig.';
+        bericht = 'er is momenteel niemand aanwezig.';
     } else {
     bericht = 'aanwezig:';
     client.filiikot.peopleNames.forEach((name) => {
@@ -17,5 +23,5 @@ case 'ls': {
     })
     // and catch the error
     .catch((err) => message.reply(`kon bericht niet verwijderen omdat: ${err}`));
-    break;
-}
+  },
+};

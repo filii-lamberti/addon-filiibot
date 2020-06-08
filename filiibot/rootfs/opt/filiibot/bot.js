@@ -211,20 +211,6 @@ client.mqtt.client.on('message', (topic, message) => {
   }
 });
 
-// Is the message author part of Praesidium?
-const isMemberPraesidium = (message) => {
-  if (message.member.roles.cache.find((role) => role.name === 'Praesidium')) return true;
-  message.reply('sorry, you need to be Praesidium to use this!');
-  return false;
-};
-
-// Is the message author a Server God?
-const isMemberServerGod = (message) => {
-  if (message.member.roles.cache.find((role) => role.name === 'Server God')) return true;
-  message.reply('sorry, you need to be a Server God to use this!');
-  return false;
-};
-
 client.afk = {};
 client.afk.set = (member, reason = ':zzz:') => {
   // Set the nickname for this member.
@@ -254,8 +240,23 @@ client.afk.clear = (member) => {
     .catch((error) => log(`Kon nickname niet veranderen omdat: ${error}`));
 };
 
+client.member = {};
+// Is the message author part of Praesidium?
+client.member.praesidium = (message) => {
+  if (message.member.roles.cache.find((role) => role.name === 'Praesidium')) return true;
+  message.reply('sorry, you need to be Praesidium to use this!');
+  return false;
+};
+
+// Is the message author a Server God?
+client.member.serverGod = (message) => {
+  if (message.member.roles.cache.find((role) => role.name === 'Server God')) return true;
+  message.reply('sorry, you need to be a Server God to use this!');
+  return false;
+};
+
 // Was there a member mentioned?
-const whichMember = (message) => {
+client.member.which = (message) => {
   if (message.mentions.members.size === 0) {
     // Use the person who made the command
     return message.member;
@@ -412,7 +413,7 @@ client.on('message', async (message) => {
   });
 
   // The user you want to add a role to
-  const member = whichMember(message);
+  const member = client.member.which(message);
 
   const command = client.commands.get(commandName);
   try {

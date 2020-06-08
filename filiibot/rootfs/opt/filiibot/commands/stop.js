@@ -1,5 +1,11 @@
-case 'stop':
-    if (!isMemberServerGod(message)) return;
+/*
+ * If the command is 'stop'
+ */
+module.exports = {
+  name: 'stop',
+  description: 'Stop!',
+  execute(message, _args) {
+    if (!message.client.member.serverGod(message)) return;
     log('Stopping add-on');
     message.reply('shutting down...');
 
@@ -13,4 +19,5 @@ case 'stop':
         // handle error
         log(`Error: ${error}`);
     });
-    break;
+  },
+};

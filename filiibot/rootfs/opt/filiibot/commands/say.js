@@ -1,7 +1,12 @@
-// If the command is 'say'
-// makes the bot say something and delete the message.
-case 'say':
-    if (!isMemberPraesidium(message)) return;
+/*
+ * If the command is 'say'
+ * makes the bot say something and delete the message.
+ */
+module.exports = {
+  name: 'say',
+  description: 'Say!',
+  execute(message, args) {
+    if (!message.client.member.praesidium(message)) return;
 
     // We delete the original message
     message
@@ -12,4 +17,5 @@ case 'say':
 
     // And we get the bot to say the thing:
     message.channel.send(args.slice(1).join(' '));
-    break;
+  },
+};

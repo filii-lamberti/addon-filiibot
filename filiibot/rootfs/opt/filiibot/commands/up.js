@@ -1,4 +1,10 @@
-case 'up':
+/*
+ * If the command is 'up'
+ */
+module.exports = {
+  name: 'up',
+  description: 'Up!',
+  execute(message, _args) {
     message.channel.send(
     `Uptime is ${humanizeDuration(client.uptime, {
         language: 'nl',
@@ -7,4 +13,5 @@ case 'up':
         round: true,
     })}.`,
     );
-    break;
+  },
+};

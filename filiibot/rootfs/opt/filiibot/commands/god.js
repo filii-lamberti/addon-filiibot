@@ -1,6 +1,11 @@
-// If the command is 'god'
-case 'god': {
-    if (!isMemberPraesidium(message)) return;
+/*
+ * If the command is 'god'
+ */
+module.exports = {
+  name: 'god',
+  description: 'God!',
+  execute(message, args) {
+    if (!message.client.member.praesidium(message)) return;
 
     log('Ever wanted to be a god?');
     const roleGod = message.guild.roles.cache.find((role) => role.name === 'Server God');
@@ -20,5 +25,5 @@ case 'god': {
     default:
         return;
     }
-    break;
-}
+  },
+};
