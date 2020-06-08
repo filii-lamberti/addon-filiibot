@@ -6,11 +6,11 @@ module.exports = {
   description: 'Ls!',
   execute(message, _args) {
     let bericht;
-    if (client.filiikot.people === '0') {
+    if (message.client.filiikot.people === '0') {
         bericht = 'er is momenteel niemand aanwezig.';
     } else {
     bericht = 'aanwezig:';
-    client.filiikot.peopleNames.forEach((name) => {
+    message.client.filiikot.peopleNames.forEach((name) => {
         bericht += `\n- ${name}`;
     });
     }

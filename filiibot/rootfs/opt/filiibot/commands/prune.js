@@ -17,7 +17,7 @@ module.exports = {
 
     // delete the messages
     message.channel.bulkDelete(amount, true)
-    .then((messages) => log(`Bulk deleted ${messages.size} messages`))
+    .then((messages) => message.client.log(`Bulk deleted ${messages.size} messages`))
     // catch delete error
     .catch((error) => message.reply(`kon berichten niet verwijderen omdat: ${error}`));
 

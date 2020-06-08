@@ -11,7 +11,7 @@ module.exports = {
     // We delete the original message
     message
     .delete()
-    .then((msg) => log(`Deleted message from ${msg.member.displayName}`))
+    .then((msg) => message.client.log(`Deleted message from ${msg.member.displayName}`))
     // and catch the error
     .catch((error) => message.reply(`kon bericht niet verwijderen omdat: ${error}`));
 

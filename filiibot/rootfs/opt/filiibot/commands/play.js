@@ -1,6 +1,10 @@
 /*
  * If the command is 'play'
  */
+const ytdl = require('ytdl-core');
+const ytpl = require('ytpl');
+const ytsr = require('ytsr');
+
 module.exports = {
   name: 'play',
   description: 'Play!',
@@ -17,17 +21,17 @@ module.exports = {
     voiceChannel.join().then((connection) => {
     if (ytdl.validateURL(args.slice(1).join(' '))
         || ytdl.validateID(args.slice(1).join(' '))) {
-        log(`Filiibot plays ${args.slice(1).join(' ')} now.`);
+        message.client.log(`Filiibot plays ${args.slice(1).join(' ')} now.`);
         const stream = ytdl(args.slice(1).join(' '), { filter: 'audioonly' });
         const dispatcher = connection.play(stream);
 
         dispatcher.on('finish', () => voiceChannel.leave());
     } else if (ytpl.validateURL(args.slice(1).join(' '))) {
-        log('dit is een playlist');
+        message.client.log('dit is een playlist');
 
         ytpl(args.slice(1).join(' '), (err, playlist) => {
         if (err) throw err;
-        log(playlist.items);
+        message.client.log(playlist.items);
 
         const stream = ytdl(playlist.items[0].id, { filter: 'audioonly' });
         const dispatcher = connection.play(stream);
@@ -41,7 +45,7 @@ module.exports = {
 
         ytsr(args.slice(1).join(' '), searchOptions, (err, searchResults) => {
         if (err) throw err;
-        log(searchResults);
+        message.client.log(searchResults);
         });
     }
     });

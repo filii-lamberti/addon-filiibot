@@ -1,6 +1,8 @@
 /*
  * If the command is 'version'
  */
+const { version } = require('../package.json');
+
 module.exports = {
   name: 'version',
   description: 'Version!',

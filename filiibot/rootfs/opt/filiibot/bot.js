@@ -21,12 +21,11 @@ if (!supervisorToken) {
 
 // Lees de externe file
 const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
-const util = require('util');
 
 // status of logging
 const { logging } = options;
 // filter console logs
-const log = (message) => {
+client.log = (message) => {
   if (logging) {
     // eslint-disable-next-line no-console
     console.log(message);
@@ -34,28 +33,24 @@ const log = (message) => {
 };
 // prints if logging is true
 if (logging) {
-  log('Logging is enabled');
+  client.log('Logging is enabled');
 }
 
 // status of debugging
 const { debugging } = options;
 // prints if debugging is true
 if (debugging) {
-  log('Debugging is enabled');
+  client.log('Debugging is enabled');
   process.env.DEBUG = '*';
 }
 
 // the message prefix and token of your bot
 const { prefix, token } = options;
 
-log(`
+client.log(`
   Prefix: ${prefix}
   Token: ${token}
 `);
-
-const ytdl = require('ytdl-core');
-const ytpl = require('ytpl');
-const ytsr = require('ytsr');
 
 // HTTP REST API
 const axios = require('axios');
@@ -85,9 +80,6 @@ for (const file of commandFiles) {
 
 // Gebruikt voor momenten
 const moment = require('moment');
-const humanizeDuration = require('humanize-duration');
-// Set the locale to dutch
-moment.locale('nl');
 
 client.filiikot = {
   humidity: 0,
@@ -114,7 +106,7 @@ client.enmap.people = new Enmap(client.enmap.options);
 
 // Wait for data to load
 client.enmap.people.defer.then(() => {
-  log(`${client.enmap.people.size} keys loaded`);
+  client.log(`${client.enmap.people.size} keys loaded`);
   // Log our bot in
   client.login(token);
 });
@@ -131,10 +123,8 @@ client.mqtt.options = {
 // Connect to the local MQTT broker
 client.mqtt.client = MQTT.connect(options.mqttBrokerUrl, client.mqtt.options);
 
-const { version } = require('./package.json');
-
 client.mqtt.client.on('connect', () => { // When connected
-  log('MQTT connected');
+  client.log('MQTT connected');
   // subscribe to a topic
   client.mqtt.client.subscribe('filiikot/+');
   // Inform controllers that garage is connected
@@ -145,38 +135,38 @@ client.mqtt.client.on('message', (topic, message) => {
   switch (topic) {
     case 'filiikot/humidity':
       client.filiikot.humidity = message.toString();
-      log(`Vochtigheid: ${client.filiikot.humidity}`);
+      client.log(`Vochtigheid: ${client.filiikot.humidity}`);
       break;
 
     case 'filiikot/last_changed':
       client.filiikot.lastChanged = moment(message.toString());
-      log(`Last changed: ${client.filiikot.lastChanged}`);
+      client.log(`Last changed: ${client.filiikot.lastChanged}`);
       break;
 
     case 'filiikot/last_updated':
       client.filiikot.lastUpdated = moment(message.toString());
-      log(`Last updated: ${client.filiikot.lastUpdated}`);
+      client.log(`Last updated: ${client.filiikot.lastUpdated}`);
       break;
 
     case 'filiikot/people_names':
       client.filiikot.peopleNames = message.toString().split(',');
-      log(`People names: ${client.filiikot.peopleNames}`);
+      client.log(`People names: ${client.filiikot.peopleNames}`);
       break;
 
     case 'filiikot/people':
       client.filiikot.people = message.toString();
-      log(`People: ${client.filiikot.people}`);
+      client.log(`People: ${client.filiikot.people}`);
       break;
 
     case 'filiikot/state':
       // message is Buffer
       client.filiikot.state = message.toString();
-      log(`Status: ${client.filiikot.state}`);
+      client.log(`Status: ${client.filiikot.state}`);
       break;
 
     case 'filiikot/temperature':
       client.filiikot.temperature = message.toString();
-      log(`Temperatuur: ${client.filiikot.temperature}`);
+      client.log(`Temperatuur: ${client.filiikot.temperature}`);
       break;
 
     default:
@@ -205,9 +195,9 @@ client.mqtt.client.on('message', (topic, message) => {
         url: 'https://ishetfiliikotopen.be/',
         type: 'PLAYING',
       })
-      .then((presence) => log(`Activity set to ${presence.activities[0].name}`))
+      .then((presence) => client.log(`Activity set to ${presence.activities[0].name}`))
       // and catch the error
-      .catch((error) => log(`Kon activity niet updaten omdat: ${error}`));
+      .catch((error) => client.log(`Kon activity niet updaten omdat: ${error}`));
   }
 });
 
@@ -217,13 +207,13 @@ client.afk.set = (member, reason = ':zzz:') => {
   member
     .setNickname(`[AFK] ${client.enmap.people.get(member.id, 'name')}`)
     .then((mbr) => {
-      log(`Changed the AFK nickname to ${mbr.nickname}`);
+      client.log(`Changed the AFK nickname to ${mbr.nickname}`);
       client.enmap.people.push('afkMembers', member.id);
       client.enmap.people.set(member.id, true, 'afk');
       client.enmap.people.set(member.id, reason, 'reason');
     })
     // catch delete error
-    .catch((error) => log(`Kon nickname niet veranderen omdat: ${error}`));
+    .catch((error) => client.log(`Kon nickname niet veranderen omdat: ${error}`));
 };
 
 client.afk.clear = (member) => {
@@ -231,13 +221,13 @@ client.afk.clear = (member) => {
   member
     .setNickname(client.enmap.people.get(member.id, 'name'))
     .then((mbr) => {
-      log(`Changed the nickname back to ${mbr.nickname}`);
+      client.log(`Changed the nickname back to ${mbr.nickname}`);
       client.enmap.people.remove('afkMembers', member.id);
       client.enmap.people.set(member.id, false, 'afk');
       client.enmap.people.set(member.id, '', 'reason');
     })
     // catch delete error
-    .catch((error) => log(`Kon nickname niet veranderen omdat: ${error}`));
+    .catch((error) => client.log(`Kon nickname niet veranderen omdat: ${error}`));
 };
 
 client.member = {};
@@ -265,22 +255,13 @@ client.member.which = (message) => {
   return message.mentions.members.first();
 };
 
-const clean = (text) => {
-  if (typeof text === 'string') {
-    return text
-      .replace(/`/g, `\`${String.fromCharCode(8203)}`)
-      .replace(/@/g, `@${String.fromCharCode(8203)}`);
-  }
-  return text;
-};
-
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord _after_ ready is emitted
 client.on('ready', () => {
   // This event will run if the bot starts, and logs in, successfully.
-  log(`Bot is klaar, ik ben ingelogd als ${client.user.tag}!`);
+  client.log(`Bot is klaar, ik ben ingelogd als ${client.user.tag}!`);
   // Should only have 1 guild
-  log(
+  client.log(
     `Serving ${client.users.cache.size} users
     in ${client.channels.cache.size} channels
     of ${client.guilds.cache.size} server.`,
@@ -308,7 +289,7 @@ client.on('ready', () => {
 });
 
 client.on('error', (error) => {
-  log(error);
+  client.log(error);
   client.enmap.people.close();
   client.mqtt.client.end();
   process.exit(1);
@@ -316,19 +297,19 @@ client.on('error', (error) => {
 
 // This event triggers when the bot joins a guild.
 client.on('guildCreate', (guild) => {
-  log(
+  client.log(
     `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
   );
 });
 
 // this event triggers when the bot is removed from a guild.
 client.on('guildDelete', (guild) => {
-  log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+  client.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
 });
 
 // Create an event listener for new guild members
 client.on('guildMemberAdd', (member) => {
-  log(`New User "${member.displayName}" has joined "${member.guild.name}"`);
+  client.log(`New User "${member.displayName}" has joined "${member.guild.name}"`);
   // If the joined member is a bot, do nothing.
   if (member.user.bot) return;
   const roleLid = member.guild.roles.cache.find((role) => role.name === 'Leden');
@@ -344,7 +325,7 @@ client.on('guildMemberAdd', (member) => {
 });
 
 client.on('guildMemberRemove', (member) => {
-  log(`User "${member.displayName}" has left "${member.guild.name}"`);
+  client.log(`User "${member.displayName}" has left "${member.guild.name}"`);
   // If the joined member is a bot, do nothing.
   if (member.user.bot) return;
   // Send the message to a designated channel on a server:
@@ -364,7 +345,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     || !oldMember.nickname
     || oldMember.nickname.substring(0, 6) === '[AFK] '
   ) return;
-  log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
+  client.log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
   client.enmap.people.set(newMember.id, newMember.displayName, 'name');
 });
 
@@ -411,9 +392,6 @@ client.on('message', async (message) => {
   mentionedAfkMembers.forEach((element) => {
     message.reply(`${client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${client.enmap.people.get(element, 'reason')}".`);
   });
-
-  // The user you want to add a role to
-  const member = client.member.which(message);
 
   const command = client.commands.get(commandName);
   try {
