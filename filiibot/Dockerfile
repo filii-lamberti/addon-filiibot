@@ -41,6 +41,7 @@ RUN \
     \
     && apk del --no-cache --purge .build-dependencies
 
+COPY rootfs/opt/filiibot/commands /opt/filiibot/commands/
 COPY \
     rootfs/opt/filiibot/bot.js \
     rootfs/opt/filiibot/welcomeDm.txt \
