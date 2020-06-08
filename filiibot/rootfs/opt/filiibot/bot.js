@@ -2,6 +2,8 @@ const supervisorToken = process.env.SUPERVISOR_TOKEN;
 
 // Nodig voor externe files
 const fs = require('fs');
+// Lees de externe file
+const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
 // This contains our configuration
 let options;
 

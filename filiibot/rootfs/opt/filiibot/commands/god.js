@@ -24,6 +24,8 @@ module.exports = {
         // Remove a role!
         member.roles.remove(roleGod);
         break;
+      default:
+        break;
     }
   },
 };

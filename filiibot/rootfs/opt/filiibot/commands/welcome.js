@@ -1,6 +1,8 @@
 /*
  * If the command is 'welcome'
  */
+// Nodig voor externe files
+const fs = require('fs');
 // Lees de externe file
 const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
 
