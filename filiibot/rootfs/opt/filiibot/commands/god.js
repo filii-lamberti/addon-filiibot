@@ -6,6 +6,8 @@ module.exports = {
   description: 'God!',
   execute(message, args) {
     if (!message.client.member.praesidium(message)) return;
+    // The user you want to add a role to
+    const member = client.member.which(message);
 
     message.client.log('Ever wanted to be a god?');
     const roleGod = message.guild.roles.cache.find((role) => role.name === 'Server God');
@@ -14,15 +16,15 @@ module.exports = {
     message.client.log(`Turning God Mode ${args[0].toLowerCase()} for ${member.displayName}`);
 
     switch (args[0].toLowerCase()) {
-    case 'on':
+      case 'on':
         // Add the god role!
         member.roles.add(roleGod);
         break;
-    case 'off':
+      case 'off':
         // Remove a role!
         member.roles.remove(roleGod);
         break;
-    default:
+      default:
         return;
     }
   },

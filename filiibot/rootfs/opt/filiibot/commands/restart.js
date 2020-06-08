@@ -10,14 +10,14 @@ module.exports = {
     message.reply('rebooting bot...');
 
     supervisorRequest.post('addons/self/restart')
-    .then((response) => {
+      .then((response) => {
         // handle success
         message.client.log(response.data);
         message.reply(response.data);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         // handle error
         message.client.log(`Error: ${error}`);
-    });
+      });
   },
 };

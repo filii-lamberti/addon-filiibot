@@ -19,54 +19,54 @@ module.exports = {
     // args[0] = what
     message.client.log(`Let's use ${args[0].toLowerCase()}`);
     switch (args[0].toLowerCase()) {
-    case 'ontgroen':
+      case 'ontgroen':
         mentionedMembers.forEach((mentionedMember) => {
-        mentionedMember.roles.remove(roleSchacht);
-        mentionedMember.roles.add(roleCommilito)
+          mentionedMember.roles.remove(roleSchacht);
+          mentionedMember.roles.add(roleCommilito)
             .then((mbr) => message.client.log(`Gave the role to ${mbr.displayName}`))
             // and catch the error
             .catch((error) => message.reply(`kon rol niet toewijzen omdat: ${error}`));
         });
         break;
 
-    case 'pensioen':
+      case 'pensioen':
         mentionedMembers.forEach((mentionedMember) => {
-        mentionedMember.roles.remove(rolePS);
-        mentionedMember.roles.add(roleOZ)
+          mentionedMember.roles.remove(rolePS);
+          mentionedMember.roles.add(roleOZ)
             .then((mbr) => message.client.log(`Gave the role to ${mbr.displayName}`))
             // and catch the error
             .catch((error) => message.reply(`kon rol niet toewijzen omdat: ${error}`));
         });
         break;
 
-    case 'dom':
+      case 'dom':
         mentionedMembers.forEach((mentionedMember) => {
-        mentionedMember.roles.add(roleSchacht)
+          mentionedMember.roles.add(roleSchacht)
             .then((mbr) => message.client.log(`Gave the role to ${mbr.displayName}`))
             // and catch the error
             .catch((error) => message.reply(`kon rol niet toewijzen omdat: ${error}`));
         });
         break;
 
-    case 'lid':
+      case 'lid':
         mentionedMembers.forEach((mentionedMember) => {
-        mentionedMember.roles.add(roleLid)
+          mentionedMember.roles.add(roleLid)
             .then((mbr) => message.client.log(`Gave the role to ${mbr.displayName}`))
             // and catch the error
             .catch((error) => message.reply(`kon rol niet toewijzen omdat: ${error}`));
         });
         break;
 
-    case 'ps':
+      case 'ps':
         mentionedMembers.forEach((mentionedMember) => {
-        mentionedMember.roles.add(rolePS)
+          mentionedMember.roles.add(rolePS)
             .then((mbr) => message.client.log(`Gave the role to ${mbr.displayName}`))
             // and catch the error
             .catch((error) => message.reply(`kon rol niet toewijzen omdat: ${error}`));
         });
         break;
 
-    default:
+      default:
         return;
     }
   },

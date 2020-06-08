@@ -10,14 +10,14 @@ module.exports = {
     message.reply('shutting down...');
 
     supervisorRequest.post('addons/self/stop')
-    .then((response) => {
+      .then((response) => {
         // handle success
         message.client.log(response.data);
         message.reply(response.data);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         // handle error
         message.client.log(`Error: ${error}`);
-    });
+      });
   },
 };

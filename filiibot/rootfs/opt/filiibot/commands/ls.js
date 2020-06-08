@@ -7,21 +7,21 @@ module.exports = {
   execute(message, _args) {
     let bericht;
     if (message.client.filiikot.people === '0') {
-        bericht = 'er is momenteel niemand aanwezig.';
+      bericht = 'er is momenteel niemand aanwezig.';
     } else {
-    bericht = 'aanwezig:';
-    message.client.filiikot.peopleNames.forEach((name) => {
+      bericht = 'aanwezig:';
+      message.client.filiikot.peopleNames.forEach((name) => {
         bericht += `\n- ${name}`;
-    });
+      });
     }
     message.reply(bericht)
-    .then((msg) => {
+      .then((msg) => {
         // We delete the original message,
         message.delete({ timeout: 10000 });
         // the one we sent
         msg.delete({ timeout: 10000 });
-    })
-    // and catch the error
-    .catch((err) => message.reply(`kon bericht niet verwijderen omdat: ${err}`));
+      })
+      // and catch the error
+      .catch((err) => message.reply(`kon bericht niet verwijderen omdat: ${err}`));
   },
 };

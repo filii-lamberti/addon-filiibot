@@ -10,12 +10,12 @@ module.exports = {
   description: 'Up!',
   execute(message, _args) {
     message.channel.send(
-    `Uptime is ${humanizeDuration(message.client.uptime, {
+      `Uptime is ${humanizeDuration(message.client.uptime, {
         language: 'nl',
         conjunction: ' en ',
         serialComma: false,
         round: true,
-    })}.`,
+      })}.`,
     );
   },
 };
