@@ -5,6 +5,7 @@
 module.exports = {
   name: 'prune',
   description: 'Prune!',
+  guildOnly: true,
   execute(message, args) {
     if (!message.client.member.praesidium(message)) return;
 

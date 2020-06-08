@@ -26,8 +26,8 @@ const Discord = require('discord.js');
 // Create an instance of a Discord client
 const client = new Discord.Client();
 
-// status of logging
-const { logging } = options;
+// status of logging and debugging
+const { logging, debugging } = options;
 // filter console logs
 client.log = (message) => {
   if (logging) {
@@ -39,9 +39,6 @@ client.log = (message) => {
 if (logging) {
   client.log('Logging is enabled');
 }
-
-// status of debugging
-const { debugging } = options;
 // prints if debugging is true
 if (debugging) {
   client.log('Debugging is enabled');
@@ -50,7 +47,7 @@ if (debugging) {
 
 // the message prefix and token of your bot
 const { prefix, token } = options;
-
+// prints the prefix and token
 client.log(`
   Prefix: ${prefix}
   Token: ${token}
@@ -75,6 +72,8 @@ const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith
 for (const file of commandFiles) {
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const command = require(`./commands/${file}`);
+  // set a new item in the Collection
+  // with the key as the command name and the value as the exported module
   client.commands.set(command.name, command);
 }
 
@@ -259,7 +258,7 @@ client.member.which = (message) => {
 
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord _after_ ready is emitted
-client.on('ready', () => {
+client.once('ready', () => {
   // This event will run if the bot starts, and logs in, successfully.
   client.log(`Bot is klaar, ik ben ingelogd als ${client.user.tag}!`);
   // Should only have 1 guild
@@ -357,6 +356,32 @@ client.on('message', async (message) => {
   if (message.author.bot) return;
   // Store the original message
   const messageTrimmed = message.content.trim();
+
+  const afkMembers = client.enmap.people.get('afkMembers');
+  if (afkMembers.includes(message.author.id)) {
+    client.afk.clear(message.member);
+  }
+
+  const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
+  mentionedAfkMembers.forEach((element) => {
+    message.reply(`${client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${client.enmap.people.get(element, 'reason')}".`);
+  });
+
+  // ik ben of kben of... at the beginning
+  const regexBen = /^i?k\s*ben\s+/im;
+  // test het bericht op regexBen
+  if (regexBen.test(messageTrimmed)) {
+    // reply but replace the beginning
+    message.channel.send(`Dag ${messageTrimmed.replace(regexBen, '')}, ik ben de Filiibot!`);
+  }
+
+  // 12 of twaalf of dozijn als woord
+  const regexTwaalf = /\b(1 ?2|t ?w ?a ?a ?l ?f|d ?o ?z ?i ?j ?n)\b/i;
+  // test het bericht op regexTwaalf
+  if (regexTwaalf.test(messageTrimmed)) {
+    message.reply('twaalf is zekerheid!');
+  }
+
   // Otherwise check if the prefix is there
   if (!messageTrimmed.startsWith(prefix)) return;
   // Remove the prefix from the message
@@ -366,46 +391,24 @@ client.on('message', async (message) => {
 
   const commandName = args.shift().toLowerCase();
   if (!client.commands.has(commandName)) return;
-
+  const command = client.commands.get(commandName);
   // Negeren als het een DM is
-  if (message.channel.type !== 'text') {
-    message.reply(
+  if (command.guildOnly && message.channel.type !== 'text') {
+    return message.reply(
       'Het spijt me zeer, maar ik ben momenteel niet geïnteresseerd in persoonlijke relaties. Ik heb mijn handen al vol met Filii te dienen!',
     );
-    return;
   }
-
-  const afkMembers = client.enmap.people.get('afkMembers');
-  if (afkMembers.includes(message.author.id)) {
-    client.afk.clear(message.member);
+  if (command.args && !args.length) {
+    let reply = `You didn't provide any arguments, ${message.author}!`;
+    if (command.usage) {
+      reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+    }
+    return message.channel.send(reply);
   }
-
-  // ik ben of kben of... at the beginning
-  const regexBen = /^i?k\s*ben\s+/im;
-  // test het bericht op regexBen
-  if (regexBen.test(messageTrimmed)) {
-    // reply but replace the beginning
-    message.channel.send(`Dag ${messageTrimmed.replace(regexBen, '')}, ik ben de Filiibot!`);
-    return;
-  }
-
-  const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
-  mentionedAfkMembers.forEach((element) => {
-    message.reply(`${client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${client.enmap.people.get(element, 'reason')}".`);
-  });
-
-  const command = client.commands.get(commandName);
   try {
     command.execute(message, args);
   } catch (error) {
     console.error(error);
     message.reply('there was an error trying to execute that command!');
-  }
-
-  // 12 of twaalf of dozijn als woord
-  const regexTwaalf = /\b(1 ?2|t ?w ?a ?a ?l ?f|d ?o ?z ?i ?j ?n)\b/i;
-  // test het bericht op regexTwaalf
-  if (regexTwaalf.test(messageTrimmed)) {
-    message.reply('twaalf is zekerheid!');
   }
 });

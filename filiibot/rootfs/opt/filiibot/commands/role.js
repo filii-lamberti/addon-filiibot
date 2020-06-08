@@ -4,6 +4,8 @@
 module.exports = {
   name: 'role',
   description: 'Role!',
+  args: true,
+  usage: '<role> <user>',
   execute(message, args) {
     if (!message.client.member.praesidium(message)) return;
 
