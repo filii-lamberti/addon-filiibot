@@ -76,6 +76,11 @@ for (const file of commandFiles) {
   // with the key as the command name and the value as the exported module
   client.commands.set(command.name, command);
 }
+const eventFiles = fs.readdirSync('./events').filter((file) => file.endsWith('.js'));
+for (const file of eventFiles) {
+  const event = require(`./events/${file}`);
+  client.on(file.split('.')[0], (...args) => event.run(...args));
+}
 
 // Gebruikt voor momenten
 const moment = require('moment');
@@ -294,13 +299,6 @@ client.on('error', (error) => {
   client.enmap.people.close();
   client.mqtt.client.end();
   process.exit(1);
-});
-
-// This event triggers when the bot joins a guild.
-client.on('guildCreate', (guild) => {
-  client.log(
-    `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
-  );
 });
 
 // this event triggers when the bot is removed from a guild.
