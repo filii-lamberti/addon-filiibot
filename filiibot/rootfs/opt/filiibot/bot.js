@@ -53,6 +53,8 @@ client.log(`
   Token: ${token}
 `);
 
+client.test = options;
+
 // HTTP REST API
 const axios = require('axios');
 // Supervisor REST API

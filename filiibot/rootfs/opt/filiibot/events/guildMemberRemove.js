@@ -1,7 +1,9 @@
-
-
-client.on('guildMemberRemove', (member) => {
-    client.log(`User "${member.displayName}" has left "${member.guild.name}"`);
+/*
+ * This event triggers when 
+ */
+module.exports = {
+  on(member) {
+    member.client.log(`User "${member.displayName}" has left "${member.guild.name}"`);
     // If the joined member is a bot, do nothing.
     if (member.user.bot) return;
     // Send the message to a designated channel on a server:
@@ -10,4 +12,5 @@ client.on('guildMemberRemove', (member) => {
     if (!welcomeChannel) return;
     // Send the message, mentioning the member
     welcomeChannel.send(`Vaarwel, ${member}, u joinde ${moment(member.joinedAt).fromNow()}.`);
-});
+  }
+};
