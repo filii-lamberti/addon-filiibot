@@ -19,17 +19,17 @@ module.exports = {
     }
 
     voiceChannel.join().then((connection) => {
-      if (ytdl.validateURL(args.slice(1).join(' '))
-        || ytdl.validateID(args.slice(1).join(' '))) {
-        message.client.log(`Filiibot plays ${args.slice(1).join(' ')} now.`);
-        const stream = ytdl(args.slice(1).join(' '), { filter: 'audioonly' });
+      if (ytdl.validateURL(args.join(' '))
+        || ytdl.validateID(args.join(' '))) {
+        message.client.log(`Filiibot plays ${args.join(' ')} now.`);
+        const stream = ytdl(args.join(' '), { filter: 'audioonly' });
         const dispatcher = connection.play(stream);
 
         dispatcher.on('finish', () => voiceChannel.leave());
-      } else if (ytpl.validateURL(args.slice(1).join(' '))) {
+      } else if (ytpl.validateURL(args.join(' '))) {
         message.client.log('dit is een playlist');
 
-        ytpl(args.slice(1).join(' '), (err, playlist) => {
+        ytpl(args.join(' '), (err, playlist) => {
           if (err) throw err;
           message.client.log(playlist.items);
 
@@ -43,7 +43,7 @@ module.exports = {
           limit: 5,
         };
 
-        ytsr(args.slice(1).join(' '), searchOptions, (err, searchResults) => {
+        ytsr(args.join(' '), searchOptions, (err, searchResults) => {
           if (err) throw err;
           message.client.log(searchResults);
         });
