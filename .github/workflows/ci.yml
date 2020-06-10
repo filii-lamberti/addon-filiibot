@@ -20,7 +20,7 @@ jobs:
         run: yarn install
         working-directory: ./filiibot/rootfs/opt/filiibot
       - name: Run ESLint
-        run: node_modules/eslint/bin/eslint.js bot.js commands/*
+        run: node_modules/eslint/bin/eslint.js bot.js commands/* events/*
         working-directory: ./filiibot/rootfs/opt/filiibot
 
   test:

@@ -1,7 +1,7 @@
 /*
  * Used to test things, examples below
- * message.client.emit('guildMemberAdd', member);
- * message.client.emit('guildMemberRemove', member);
+ * message.client.emit('guildMemberAdd', message.member);
+ * message.client.emit('guildMemberRemove', message.member);
  * message.client.emit('guildCreate', message.guild);
  * message.client.emit('guildDelete', message.guild);
  */
