@@ -7,7 +7,7 @@ module.exports = class {
   }
 
   run(guild) {
-    client.log(
+    guild.client.log(
       `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
     );
   }

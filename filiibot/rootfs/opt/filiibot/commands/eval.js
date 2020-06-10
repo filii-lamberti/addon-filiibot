@@ -24,7 +24,7 @@ module.exports = {
 
     try {
       // eslint-disable-next-line no-eval
-      let evaled = eval(args.slice(1).join(' '));
+      let evaled = eval(args.join(' '));
 
       if (typeof evaled !== 'string') {
         evaled = util.inspect(evaled);
