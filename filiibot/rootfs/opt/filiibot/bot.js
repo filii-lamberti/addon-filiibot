@@ -19,14 +19,19 @@ if (!supervisorToken) {
   options.mqttBrokerUrl = 'mqtt://core-mosquitto';
 }
 
-const SuperClient = require('./base/client.js');
+// Gebruikt voor momenten
+const moment = require('moment');
+// Set the locale to dutch
+moment.locale('nl');
+
+const superClient = require('./base/client.js');
 /* options = {
   logging, // status of logging
   debugging, // status of debugging
   prefix, // the message prefix
   token // the token of your bot
 } */
-const client = new SuperClient(options);
+const client = new superClient(options);
 
 // HTTP REST API
 const axios = require('axios');
@@ -41,11 +46,6 @@ client.supervisorRequest = axios.create({
 
 // eslint-disable-next-line no-console
 process.on('unhandledRejection', (error) => console.error('Uncaught Promise Rejection', error));
-
-// Gebruikt voor momenten
-const moment = require('moment');
-// Set the locale to dutch
-moment.locale('nl');
 
 client.filiikot = {
   humidity: 0,

@@ -20,7 +20,8 @@ class Message {
     const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
     mentionedAfkMembers.forEach((element) => {
       message.reply(
-        `${message.client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${message.client.enmap.people.get(element, 'reason')}".`
+        `${message.client.enmap.people.get(element, 'name')} is momenteel AFK
+        met als reden: "${message.client.enmap.people.get(element, 'reason')}".`,
       );
     });
 
@@ -30,7 +31,7 @@ class Message {
     if (regexBen.test(messageTrimmed)) {
       // reply but replace the beginning
       message.channel.send(
-        `Dag ${messageTrimmed.replace(regexBen, '')}, ik ben de Filiibot!`
+        `Dag ${messageTrimmed.replace(regexBen, '')}, ik ben de Filiibot!`,
       );
     }
 
@@ -73,6 +74,6 @@ class Message {
       message.reply('there was an error trying to execute that command!');
     }
   }
-};
+}
 
 module.exports = Message;

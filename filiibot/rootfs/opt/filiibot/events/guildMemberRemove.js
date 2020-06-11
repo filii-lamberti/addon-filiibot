@@ -1,3 +1,8 @@
+// Gebruikt voor momenten
+const moment = require('moment');
+// Set the locale to dutch
+moment.locale('nl');
+
 /*
  * This event triggers when
  */
