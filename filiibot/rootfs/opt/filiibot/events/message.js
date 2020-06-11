@@ -1,7 +1,11 @@
 /*
  * This event will run on every single message received, from any channel or DM.
  */
-module.exports = {
+class Message {
+  constructor(client) {
+    this.client = client;
+  }
+
   async on(message) {
 
     // Negeren als het bericht van een bot komt
@@ -35,9 +39,9 @@ module.exports = {
     }
 
     // Otherwise check if the prefix is there
-    if (!messageTrimmed.startsWith(message.client.test.prefix)) return;
+    if (!messageTrimmed.startsWith(message.client.config.prefix)) return;
     // Remove the prefix from the message
-    const messageSliced = messageTrimmed.slice(message.client.test.prefix.length);
+    const messageSliced = messageTrimmed.slice(message.client.config.prefix.length);
     // To get the "message" itself we join the array back into a string with spaces
     const args = messageSliced.split(/\s+/g);
 
@@ -54,7 +58,7 @@ module.exports = {
     if (command.args && !args.length) {
       let reply = `You didn't provide any arguments, ${message.author}!`;
       if (command.usage) {
-        reply += `\nThe proper usage would be: \`${message.client.test.prefix}${command.name} ${command.usage}\``;
+        reply += `\nThe proper usage would be: \`${message.client.config.prefix}${command.name} ${command.usage}\``;
       }
       message.channel.send(reply);
       return;
@@ -67,3 +71,5 @@ module.exports = {
     }
   }
 };
+
+module.exports = Message;

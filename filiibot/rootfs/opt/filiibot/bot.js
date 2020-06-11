@@ -2,8 +2,6 @@ const supervisorToken = process.env.SUPERVISOR_TOKEN;
 
 // Nodig voor externe files
 const fs = require('fs');
-// Lees de externe file
-const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
 // This contains our configuration
 let options;
 
@@ -21,39 +19,13 @@ if (!supervisorToken) {
   options.mqttBrokerUrl = 'mqtt://core-mosquitto';
 }
 
-// Load up the discord.js library
-const Discord = require('discord.js');
-// Create an instance of a Discord client
-const client = new Discord.Client();
-
 // status of logging and debugging
 const { logging, debugging } = options;
-// filter console logs
-client.log = (message) => {
-  if (logging) {
-    // eslint-disable-next-line no-console
-    console.log(message);
-  }
-};
-// prints if logging is true
-if (logging) {
-  client.log('Logging is enabled');
-}
-// prints if debugging is true
-if (debugging) {
-  client.log('Debugging is enabled');
-  process.env.DEBUG = '*';
-}
-
 // the message prefix and token of your bot
 const { prefix, token } = options;
-// prints the prefix and token
-client.log(`
-  Prefix: ${prefix}
-  Token: ${token}
-`);
 
-client.test = options;
+const SuperClient = require('./base/client.js');
+const client = new SuperClient(options);
 
 // HTTP REST API
 const axios = require('axios');
@@ -68,21 +40,6 @@ client.supervisorRequest = axios.create({
 
 // eslint-disable-next-line no-console
 process.on('unhandledRejection', (error) => console.error('Uncaught Promise Rejection', error));
-
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
-for (const file of commandFiles) {
-  // eslint-disable-next-line global-require, import/no-dynamic-require
-  const command = require(`./commands/${file}`);
-  // set a new item in the Collection
-  // with the key as the command name and the value as the exported module
-  client.commands.set(command.name, command);
-}
-const eventFiles = fs.readdirSync('./events').filter((file) => file.endsWith('.js'));
-for (const file of eventFiles) {
-  const event = require(`./events/${file}`);
-  client.on(file.split('.')[0], (...args) => event.on(...args));
-}
 
 // Gebruikt voor momenten
 const moment = require('moment');

@@ -1,7 +1,16 @@
 /*
  * Create an event listener for new guild members
  */
-module.exports = {
+// Nodig voor externe files
+const fs = require('fs');
+// Lees de externe file
+const welcomeDm = fs.readFileSync('./welcomeDm.txt', 'utf8');
+
+class GuildMemberAdd {
+  constructor(client) {
+    this.client = client;
+  }
+
   on(member) {
     member.client.log(`New User "${member.displayName}" has joined "${member.guild.name}"`);
     // If the joined member is a bot, do nothing.
@@ -18,3 +27,5 @@ module.exports = {
     member.send(welcomeDm);
   }
 }
+
+module.exports = GuildMemberAdd;

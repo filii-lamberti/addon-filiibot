@@ -1,7 +1,11 @@
 /*
  * This event triggers when 
  */
-module.exports = {
+class GuildMemberUpdate {
+  constructor(client) {
+    this.client = client;
+  }
+
   on(oldMember, newMember) {
     // If the nickname is the same, was [AFK] or is [AFK], do nothing.
     if (
@@ -15,3 +19,5 @@ module.exports = {
     oldMember.client.enmap.people.set(newMember.id, newMember.displayName, 'name');
   }
 };
+
+module.exports = GuildMemberUpdate;

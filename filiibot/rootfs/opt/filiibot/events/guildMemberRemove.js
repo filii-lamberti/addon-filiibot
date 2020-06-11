@@ -1,7 +1,11 @@
 /*
  * This event triggers when 
  */
-module.exports = {
+class GuildMemberRemove {
+  constructor(client) {
+    this.client = client;
+  }
+
   on(member) {
     member.client.log(`User "${member.displayName}" has left "${member.guild.name}"`);
     // If the joined member is a bot, do nothing.
@@ -14,3 +18,5 @@ module.exports = {
     welcomeChannel.send(`Vaarwel, ${member}, u joinde ${moment(member.joinedAt).fromNow()}.`);
   }
 };
+
+module.exports = GuildMemberRemove;

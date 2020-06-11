@@ -1,7 +1,11 @@
 /*
- * This event triggers when 
+ * This event triggers when
  */
-module.exports = {
+class Error {
+  constructor(client) {
+    this.client = client;
+  }
+
   on(error) {
     client.log(error);
     client.enmap.people.close();
@@ -9,3 +13,5 @@ module.exports = {
     process.exit(1);
   }
 };
+
+module.exports = Error;
