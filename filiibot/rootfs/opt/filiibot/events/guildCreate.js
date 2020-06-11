@@ -11,6 +11,6 @@ class GuildCreate {
       `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
     );
   }
-};
+}
 
 module.exports = GuildCreate;

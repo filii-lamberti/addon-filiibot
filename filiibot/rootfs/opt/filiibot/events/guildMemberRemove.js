@@ -1,5 +1,5 @@
 /*
- * This event triggers when 
+ * This event triggers when
  */
 class GuildMemberRemove {
   constructor(client) {
@@ -17,6 +17,6 @@ class GuildMemberRemove {
     // Send the message, mentioning the member
     welcomeChannel.send(`Vaarwel, ${member}, u joinde ${moment(member.joinedAt).fromNow()}.`);
   }
-};
+}
 
 module.exports = GuildMemberRemove;

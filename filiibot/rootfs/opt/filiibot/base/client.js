@@ -40,7 +40,7 @@ class SuperClient extends Client {
       // eslint-disable-next-line no-console
       console.log(message);
     }
-  };
+  }
 
   loadCommands() {
     const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
@@ -61,6 +61,6 @@ class SuperClient extends Client {
       super.on(file.split('.')[0], (...args) => event.on(...args));
     }
   }
-};
+}
 
 module.exports = SuperClient;

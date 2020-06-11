@@ -7,7 +7,6 @@ class Message {
   }
 
   async on(message) {
-
     // Negeren als het bericht van een bot komt
     if (message.author.bot) return;
     // Store the original message
@@ -20,7 +19,9 @@ class Message {
 
     const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
     mentionedAfkMembers.forEach((element) => {
-      message.reply(`${message.client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${message.client.enmap.people.get(element, 'reason')}".`);
+      message.reply(
+        `${message.client.enmap.people.get(element, 'name')} is momenteel AFK met als reden: "${message.client.enmap.people.get(element, 'reason')}".`
+      );
     });
 
     // ik ben of kben of... at the beginning
@@ -28,7 +29,9 @@ class Message {
     // test het bericht op regexBen
     if (regexBen.test(messageTrimmed)) {
       // reply but replace the beginning
-      message.channel.send(`Dag ${messageTrimmed.replace(regexBen, '')}, ik ben de Filiibot!`);
+      message.channel.send(
+        `Dag ${messageTrimmed.replace(regexBen, '')}, ik ben de Filiibot!`
+      );
     }
 
     // 12 of twaalf of dozijn als woord

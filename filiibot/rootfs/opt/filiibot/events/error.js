@@ -7,11 +7,11 @@ class Error {
   }
 
   on(error) {
-    client.log(error);
-    client.enmap.people.close();
-    client.mqtt.client.end();
+    this.client.log(error);
+    this.client.enmap.people.close();
+    this.client.mqtt.client.end();
     process.exit(1);
   }
-};
+}
 
 module.exports = Error;

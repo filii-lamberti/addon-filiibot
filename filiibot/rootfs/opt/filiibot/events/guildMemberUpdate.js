@@ -1,5 +1,5 @@
 /*
- * This event triggers when 
+ * This event triggers when
  */
 class GuildMemberUpdate {
   constructor(client) {
@@ -18,6 +18,6 @@ class GuildMemberUpdate {
     oldMember.client.log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
     oldMember.client.enmap.people.set(newMember.id, newMember.displayName, 'name');
   }
-};
+}
 
 module.exports = GuildMemberUpdate;
