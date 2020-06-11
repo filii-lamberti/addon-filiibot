@@ -10,7 +10,7 @@
     "axios": "^0.19.2",
     "better-sqlite3": "^7.0.1",
     "discord.js": "^12.2.0",
-    "enmap": "^5.3.0",
+    "enmap": "^5.3.1",
     "ffmpeg-static": "^4.2.2",
     "humanize-duration": "^3.23.0",
     "moment": "^2.26.0",

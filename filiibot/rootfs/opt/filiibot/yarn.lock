@@ -579,10 +579,10 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   dependencies:
     once "^1.4.0"
 
-enmap@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/enmap/-/enmap-5.3.0.tgz#f304146133129c9fed0638e416c58d9866654b94"
-  integrity sha512-XSpIKK/x6Epikre8xZQ1LWb24fGZ3EdBI7mZlAATVdhRm7WmvsT37Y5ID2De5ZbzZjNYCP0ifdywYuAvcpT+0A==
+enmap@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/enmap/-/enmap-5.3.1.tgz#147d44fc2dd7ded7f0a4c841618f239573be833d"
+  integrity sha512-s/tJwhUWebf7Scip9RyOY0hzOUKfqab3CdcSr+Dkn5Z8qKtIoIsS8hKqWnYvSYZXVBKP2WIzaBWn+0qRXWNYhA==
   dependencies:
     lodash "^4.17.15"
     on-change "^2.0.1"
