@@ -12,7 +12,7 @@
     "discord.js": "^12.2.0",
     "enmap": "^5.3.1",
     "ffmpeg-static": "^4.2.2",
-    "humanize-duration": "^3.23.0",
+    "humanize-duration": "^3.23.1",
     "moment": "^2.26.0",
     "mqtt": "^4.1.0",
     "ytdl-core": "^3.1.1",
