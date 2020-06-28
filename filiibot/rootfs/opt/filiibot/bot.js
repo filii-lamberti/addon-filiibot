@@ -24,17 +24,26 @@ const moment = require('moment');
 // Set the locale to dutch
 moment.locale('nl');
 
-const superClient = require('./base/client.js');
+// HTTP REST API
+const axios = require('axios');
+
+const SuperClient = require('./base/client.js');
+const SuperAfk = require('./base/afk.js');
+const SuperEnmap = require('./base/enmap.js');
+const SuperMember = require('./base/member.js');
+const SuperMqtt = require('./base/mqtt.js');
 /* options = {
   logging, // status of logging
   debugging, // status of debugging
   prefix, // the message prefix
   token // the token of your bot
 } */
-const client = new superClient(options);
+const client = new SuperClient(options);
+client.afk = new SuperAfk(client);
+client.enmap = new SuperEnmap(client);
+client.member = new SuperMember(client);
+client.mqtt = new SuperMqtt(client);
 
-// HTTP REST API
-const axios = require('axios');
 // Supervisor REST API
 client.supervisorRequest = axios.create({
   baseURL: 'http://supervisor/',
@@ -77,7 +86,7 @@ client.once('ready', () => {
   const filiiGuild = client.guilds.cache.get('238704983468539905');
   // Check for all members from the Filii Guild
   for (const [key, value] of filiiGuild.members.cache) {
-    client.enmap.people.ensure(key, {
+    client.enmap.ensure(key, {
       id: key,
       name: value.displayName,
       afk: false,
@@ -88,5 +97,5 @@ client.once('ready', () => {
       searchResult: [],
     });
   }
-  client.enmap.people.ensure('afkMembers', []);
+  client.enmap.ensure('afkMembers', []);
 });

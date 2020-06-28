@@ -12,7 +12,7 @@ class Message {
     // Store the original message
     const messageTrimmed = message.content.trim();
 
-    const afkMembers = message.client.enmap.people.get('afkMembers');
+    const afkMembers = message.client.enmap.get('afkMembers');
     if (afkMembers.includes(message.author.id)) {
       message.client.afk.clear(message.member);
     }
@@ -20,8 +20,8 @@ class Message {
     const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
     mentionedAfkMembers.forEach((element) => {
       message.reply(
-        `${message.client.enmap.people.get(element, 'name')} is momenteel AFK
-        met als reden: "${message.client.enmap.people.get(element, 'reason')}".`,
+        `${message.client.enmap.get(element, 'name')} is momenteel AFK
+        met als reden: "${message.client.enmap.get(element, 'reason')}".`,
       );
     });
 

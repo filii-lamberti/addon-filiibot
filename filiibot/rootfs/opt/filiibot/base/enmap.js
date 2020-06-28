@@ -1,24 +1,25 @@
 // Load Enmap
 const Enmap = require('enmap');
 
-class SuperEnmap {
+class SuperEnmap extends Enmap {
   constructor(client) {
-    this.client = client;
-
     // Enmap options
-    options = {
+    const options = {
       name: 'people',
-      dataDir: options.enmapDataDir,
+      dataDir: client.config.enmapDataDir,
       ensureProps: true,
     };
+
     // Normal enmap with default options but custom data location
-    people = new Enmap(options);
+    super(options);
+
+    this.client = client;
 
     // Wait for data to load
-    people.defer.then(() => {
-      this.client.log(`${people.size} keys loaded`);
+    this.defer.then(() => {
+      this.client.log(`${this.size} keys loaded`);
       // Log our bot in
-      this.client.login(token);
+      this.client.login(client.config.token);
     });
   }
 }
