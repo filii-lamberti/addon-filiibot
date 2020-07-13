@@ -8,14 +8,14 @@ class SuperMember {
     if (message.member.roles.cache.find((role) => role.name === 'Praesidium')) return true;
     message.reply('sorry, you need to be Praesidium to use this!');
     return false;
-  };
+  }
 
   // Is the message author a Server God?
   serverGod(message) {
     if (message.member.roles.cache.find((role) => role.name === 'Server God')) return true;
     message.reply('sorry, you need to be a Server God to use this!');
     return false;
-  };
+  }
 
   // Was there a member mentioned?
   which(message) {
