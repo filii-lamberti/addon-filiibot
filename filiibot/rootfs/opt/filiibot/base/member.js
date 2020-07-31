@@ -4,21 +4,21 @@ class SuperMember {
   }
 
   // Is the message author part of Praesidium?
-  praesidium(message) {
-    if (message.member.roles.cache.find((role) => role.name === 'Praesidium')) return true;
+  static praesidium(message) {
+    if (message.member.roles.cache.get('239827955558121473')) return true;
     message.reply('sorry, you need to be Praesidium to use this!');
     return false;
   }
 
   // Is the message author a Server God?
-  serverGod(message) {
-    if (message.member.roles.cache.find((role) => role.name === 'Server God')) return true;
+  static serverGod(message) {
+    if (message.member.roles.cache.get('240103009944731648')) return true;
     message.reply('sorry, you need to be a Server God to use this!');
     return false;
   }
 
   // Was there a member mentioned?
-  which(message) {
+  static which(message) {
     if (message.mentions.members.size === 0) {
       // Use the person who made the command
       return message.member;

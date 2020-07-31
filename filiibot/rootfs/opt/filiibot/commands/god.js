@@ -10,7 +10,7 @@ module.exports = {
     const member = message.client.member.which(message);
 
     message.client.log('Ever wanted to be a god?');
-    const roleGod = message.guild.roles.cache.find((role) => role.name === 'Server God');
+    const roleGod = message.guild.roles.cache.get('240103009944731648');
     if (!roleGod) return;
     // args[0] = status
     message.client.log(`Turning God Mode ${args[0].toLowerCase()} for ${member.displayName}`);

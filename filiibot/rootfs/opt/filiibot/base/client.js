@@ -12,8 +12,9 @@ class SuperClient extends Client {
     super();
 
     this.commands = new Collection();
-
+    this.queue = new Map();
     this.config = config;
+    this.filiiGuild = '';
 
     // prints if logging is true
     if (config.logging) {
@@ -60,6 +61,40 @@ class SuperClient extends Client {
       const event = new (require(`../events/${file}`))(this);
       super.on(file.split('.')[0], (...args) => event.on(...args));
     }
+  }
+
+  onceReady() {
+    // This event will run if the bot starts, and logs in, successfully.
+    this.log(`Bot is klaar, ik ben ingelogd als ${this.user.tag}!`);
+    // Should only have 1 guild
+    this.log(
+      `Serving ${this.users.cache.size} users
+    in ${this.channels.cache.size} channels
+    of ${this.guilds.cache.size} server.`,
+    );
+
+    // Change the bot's playing game to something useless
+    this.user.setActivity('met de gevoelens van het filiikot');
+
+    // Get the Filii Guild by ID from all Guilds
+    const filiiGuild = this.guilds.cache.get('238704983468539905');
+    const musicVoiceChannel = this.channels.cache.get('471387094242033674');
+    const musicTextChannel = this.channels.cache.get('471386777526075403');
+
+    // Check for all members from the Filii Guild
+    for (const [key, value] of filiiGuild.members.cache) {
+      this.enmap.ensure(key, {
+        id: key,
+        name: value.displayName,
+        afk: false,
+        reason: '',
+        type: '',
+        keyword: '',
+        selection: 0,
+        searchResult: [],
+      });
+    }
+    this.enmap.ensure('afkMembers', []);
   }
 }
 

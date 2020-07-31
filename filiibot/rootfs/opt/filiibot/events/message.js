@@ -17,7 +17,8 @@ class Message {
       message.client.afk.clear(message.member);
     }
 
-    const mentionedAfkMembers = afkMembers.filter((element) => message.mentions.members.has(element));
+    const mentionedAfkMembers = afkMembers
+      .filter((element) => message.mentions.members.has(element));
     mentionedAfkMembers.forEach((element) => {
       message.reply(
         `${message.client.enmap.get(element, 'name')} is momenteel AFK
@@ -70,7 +71,7 @@ class Message {
     try {
       command.execute(message, args);
     } catch (error) {
-      message.client.log(error);
+      this.client.log(error);
       message.reply('there was an error trying to execute that command!');
     }
   }

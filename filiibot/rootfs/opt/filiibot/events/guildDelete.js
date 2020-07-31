@@ -7,7 +7,7 @@ class GuildDelete {
   }
 
   on(guild) {
-    guild.client.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
+    this.client.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
   }
 }
 

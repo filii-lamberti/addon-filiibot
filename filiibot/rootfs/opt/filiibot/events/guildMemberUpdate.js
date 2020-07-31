@@ -15,7 +15,7 @@ class GuildMemberUpdate {
       || !oldMember.nickname
       || oldMember.nickname.substring(0, 6) === '[AFK] '
     ) return;
-    oldMember.client.log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
+    this.client.log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
     oldMember.client.enmap.people.set(newMember.id, newMember.displayName, 'name');
   }
 }

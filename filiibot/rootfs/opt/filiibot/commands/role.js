@@ -14,11 +14,11 @@ module.exports = {
     message.client.log('Doing some roleplay?');
     // Can't use the next thing because otherwise they would get notified
     // let role = message.mentions.roles.cache.first();
-    const roleCommilito = message.guild.roles.cache.find((role) => role.name === 'Commilitones');
-    const roleOZ = message.guild.roles.cache.find((role) => role.name === 'Ouw Zakken');
-    const roleSchacht = message.guild.roles.cache.find((role) => role.name === 'Schachten (dom dom)');
-    const roleLid = message.guild.roles.cache.find((role) => role.name === 'Leden');
-    const rolePS = message.guild.roles.cache.find((role) => role.name === 'Praesidium');
+    const roleCommilito = message.guild.roles.cache.get('248234454747709440');
+    const roleOZ = message.guild.roles.cache.get('240179463164264458');
+    const roleSchacht = message.guild.roles.cache.get('239828322295611392');
+    const roleLid = message.guild.roles.cache.get('492090623919390761');
+    const rolePS = message.guild.roles.cache.get('239827955558121473');
 
     // args[0] = what
     message.client.log(`Let's use ${args[0].toLowerCase()}`);
