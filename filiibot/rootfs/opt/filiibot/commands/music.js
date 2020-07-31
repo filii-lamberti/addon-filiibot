@@ -1,0 +1,4 @@
+//stop
+//play
+//pause
+//search
