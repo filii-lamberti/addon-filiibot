@@ -44,7 +44,7 @@ class SuperClient extends Client {
   }
 
   loadCommands() {
-    const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync('../commands').filter((file) => file.endsWith('.js'));
     for (const file of commandFiles) {
       // eslint-disable-next-line global-require, import/no-dynamic-require
       const command = require(`../commands/${file}`);
@@ -78,8 +78,6 @@ class SuperClient extends Client {
 
     // Get the Filii Guild by ID from all Guilds
     const filiiGuild = this.guilds.cache.get('238704983468539905');
-    const musicVoiceChannel = this.channels.cache.get('471387094242033674');
-    const musicTextChannel = this.channels.cache.get('471386777526075403');
 
     // Check for all members from the Filii Guild
     for (const [key, value] of filiiGuild.members.cache) {

@@ -1,53 +1,118 @@
-/*
- * If the command is 'play'
- */
-const ytdl = require('ytdl-core');
-const ytpl = require('ytpl');
-const ytsr = require('ytsr');
+module.exports.permissionRequired = 0
 
-module.exports = {
-  name: 'play',
-  description: 'Play!',
-  execute(message, args) {
-    if (message.channel.type !== 'text') return;
+const ytdl = require("ytdl-core"), ytpl = require("ytpl"), ytsr = require("ytsr"), { Util } = require("discord.js");
 
-    const voiceChannel = message.member.voice.channel;
+module.exports.run = async (client, message, args, config, queue) => {
+  const voiceChannel = message.member.voice.channel;
+  if (!voiceChannel) return message.channel.send("❌ You are not in a voice channel, please join one first!")
 
-    if (!voiceChannel) {
-      message.reply('Please join a voice channel first!');
-      return;
+  const permissions = voiceChannel.permissionsFor(message.guild.me)
+  if (!permissions.has("CONNECT")) return message.channel.send("❌ I don't have permission to connect to the voice channel!")
+  if (!permissions.has("SPEAK")) return message.channel.send("❌ I don't have permission to speak in the voice channel!")
+
+  if (!args.length) return message.channel.send("❌ You need to search for a video, or give me a URL!")
+
+  const url = args.join(" ")
+  if (url.includes("list=")) {
+    const playlist = await ytpl(url.split("list=")[1])
+    const videos = playlist.items;
+
+    message.channel.send(`✅ Playlist **${playlist.title}** (${videos.length}) has been added to the queue!`)
+
+    for (const video of videos) await queueSong(video, message, voiceChannel, queue)
+  } else {
+    let video;
+    try {
+      video = await ytdl.getBasicInfo(url)
+    } catch(e) {
+      try {
+        const results = await ytsr(url, { limit: 10 })
+        const videos = results.items
+        let index = 0;
+
+        if (!videos.length) return message.channel.send("❌ No search results found.")
+
+        await message.channel.send([
+          "__**Song selection:**__",
+          videos.map(v => `${++index} - **${v.title}**`).join("\n"),
+          `**Select your song by sending the number from 1 to ${videos.length} in chat.**`
+        ].join("\n\n"))
+
+        let response;
+        try {
+          response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < videos.length + 1 && msg.author.id == message.author.id, {
+            max: 1,
+            time: 30000,
+            errors: ['time']
+          });
+        } catch(e) {
+          return message.channel.send("❌ Video selection timed out.")
+        }
+        const videoIndex = parseInt(response.first().content)
+        video = await ytdl.getBasicInfo(videos[videoIndex - 1].link.split("?v=")[1])
+      } catch(e) {
+        console.log(e)
+        return message.channel.send("❌ An unknown error occurred.")
+      }
+    }
+    
+    await message.channel.send(`✅ Song **${video.videoDetails.title}** has been added to the queue!`)
+    return await queueSong(video, message, voiceChannel, queue)
+  }
+}
+
+async function queueSong(video, message, voiceChannel, queue) {
+  const serverQueue = queue.get(message.guild.id)
+
+  const song = {
+    id: video.videoDetails.videoId,
+    title: Util.escapeMarkdown(video.videoDetails.title),
+    url: video.videoDetails.video_url
+  }
+
+  if (!serverQueue) {
+    const queueConstruct = {
+      textChannel: message.channel,
+      voiceChannel,
+      connection: null,
+      songs: [song],
+      volume: 50,
+      playing: true
     }
 
-    voiceChannel.join().then((connection) => {
-      if (ytdl.validateURL(args.join(' '))
-        || ytdl.validateID(args.join(' '))) {
-        message.client.log(`Filiibot plays ${args.join(' ')} now.`);
-        const stream = ytdl(args.join(' '), { filter: 'audioonly' });
-        const dispatcher = connection.play(stream);
+    try {
+      const connection = await voiceChannel.join();
+      queueConstruct.connection = connection;
+      queue.set(message.guild.id, queueConstruct)
+      playSong(message.guild, queue, queueConstruct.songs[0])
+    } catch(e) {
+      console.log(e)
+      message.channel.send("❌ An unknown error occoured upon trying to join the voice channel!")
+      return queue.delete(message.guild.id)
+    }
+  } else serverQueue.songs.push(song);
 
-        dispatcher.on('finish', () => voiceChannel.leave());
-      } else if (ytpl.validateURL(args.join(' '))) {
-        message.client.log('dit is een playlist');
+  return;
+}
 
-        ytpl(args.join(' '), (err, playlist) => {
-          if (err) throw err;
-          message.client.log(playlist.items);
+async function playSong(guild, queue, song) {
+  const serverQueue = queue.get(guild.id);
 
-          const stream = ytdl(playlist.items[0].id, { filter: 'audioonly' });
-          const dispatcher = connection.play(stream);
+  if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
+    return;
+  }
 
-          dispatcher.on('finish', () => voiceChannel.leave());
-        });
-      } else {
-        const searchOptions = {
-          limit: 5,
-        };
-
-        ytsr(args.join(' '), searchOptions, (err, searchResults) => {
-          if (err) throw err;
-          message.client.log(searchResults);
-        });
+  serverQueue.connection.play(ytdl(song.id), { bitrate: 'auto' })
+    .on("speaking", speaking => {
+      if (!speaking) {
+        serverQueue.songs.shift();
+        playSong(guild, queue, serverQueue.songs[0])
       }
-    });
-  },
-};
+    })
+    .on("error", console.error)
+    .setVolumeLogarithmic(serverQueue.volume / 250)
+  
+  serverQueue.textChannel.send(`🎶 Now playing **${song.title}**`)
+}
