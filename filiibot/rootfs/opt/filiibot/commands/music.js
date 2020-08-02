@@ -28,10 +28,12 @@ module.exports = {
     }
 
     if (!message.client.commands.has(subCommandName)) return;
+    const subCommand = subCommands.get(subCommandName);
+    subCommand.execute(message, _args);
 
-    switch (subCommandName) {
+    /* switch (subCommandName) {
       case 'play':
       default:
-    }
+    } */
   },
 };

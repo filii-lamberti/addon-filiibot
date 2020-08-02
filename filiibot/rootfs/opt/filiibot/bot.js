@@ -1,7 +1,7 @@
 // Nodig voor externe files
 const fs = require('fs');
 // This contains our configuration
-let options;
+let options = {};
 options.supervisorToken = process.env.SUPERVISOR_TOKEN;
 
 if (!options.supervisorToken) {
@@ -17,11 +17,6 @@ if (!options.supervisorToken) {
   options.enmapDataDir = '/data';
   options.mqttBrokerUrl = 'mqtt://core-mosquitto';
 }
-
-// Gebruikt voor momenten
-const moment = require('moment');
-// Set the locale to dutch
-moment.locale('nl');
 
 const SuperClient = require('./base/client.js');
 const SuperAfk = require('./base/afk.js');
@@ -42,17 +37,6 @@ client.mqtt = new SuperMqtt(client);
 
 // eslint-disable-next-line no-console
 process.on('unhandledRejection', (error) => console.error('Uncaught Promise Rejection', error));
-
-client.filiikot = {
-  humidity: 0,
-  lastChanged: moment(0),
-  lastUpdated: moment(0),
-  people: 0,
-  peopleNames: [],
-  state: 'false',
-  statusMessage: 'met de gevoelens van het filiikot',
-  temperature: 0,
-};
 
 // The ready event is vital, it means that your bot will only start reacting to information
 // from Discord _after_ ready is emitted

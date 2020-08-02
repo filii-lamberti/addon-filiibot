@@ -12,6 +12,7 @@ class SuperClient extends Client {
     super();
 
     this.commands = new Collection();
+    this.cooldowns = new Collection();
     this.queue = new Map();
     this.config = config;
     this.filiiGuild = '';
@@ -44,7 +45,7 @@ class SuperClient extends Client {
   }
 
   loadCommands() {
-    const commandFiles = fs.readdirSync('../commands').filter((file) => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith('.js'));
     for (const file of commandFiles) {
       // eslint-disable-next-line global-require, import/no-dynamic-require
       const command = require(`../commands/${file}`);
