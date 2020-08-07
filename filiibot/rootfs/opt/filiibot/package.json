@@ -26,6 +26,7 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1",
+    "libsodium-wrappers": "^0.7.8",
     "utf-8-validate": "^5.0.2"
   }
 }
