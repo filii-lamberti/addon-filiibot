@@ -554,10 +554,10 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   dependencies:
     once "^1.4.0"
 
-enmap@^5.4.1:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/enmap/-/enmap-5.5.1.tgz#c27dc2cc8b72f14f083ab631adf01cca7a72e960"
-  integrity sha512-D5g3pRF7DVgJIuvjdwIxAbCFswkCKu2lEIPhY8Np3gZknDzWF9CX0WL1q12xqrZXsI6uhQdVk423YnzUEs7WRg==
+enmap@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/enmap/-/enmap-5.6.1.tgz#a193c256512ed5c3b61da04730bbb8c3c71d3835"
+  integrity sha512-JVlG/j9w/7TPVxaFH6Lm/BTPBxhEK5ALe+8iLOjcMRdAWiQ+7AG4J3Q15Uc3SDqIJt+tH+WhvtQ7+pv+KzgSeA==
   dependencies:
     lodash "^4.17.19"
     on-change "^2.0.1"
@@ -1292,6 +1292,18 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+libsodium-wrappers@^0.7.8:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/libsodium-wrappers/-/libsodium-wrappers-0.7.8.tgz#d95cdf3e7236c2aef76844bf8e1929ba9eef3e9e"
+  integrity sha512-PDhPWXBqd/SaqAFUBgH2Ux7b3VEEJgyD6BQB+VdNFJb9PbExGr/T/myc/MBoSvl8qLzfm0W0IVByOQS5L1MrCg==
+  dependencies:
+    libsodium "0.7.8"
+
+libsodium@0.7.8:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/libsodium/-/libsodium-0.7.8.tgz#fbd12247b7b1353f88d8de1cbc66bc1a07b2e008"
+  integrity sha512-/Qc+APf0jbeWSaeEruH0L1/tbbT+sbf884ZL0/zV/0JXaDPBzYkKbyb/wmxMHgAHzm3t6gqe7bOOXAVwfqVikQ==
 
 load-json-file@^2.0.0:
   version "2.0.0"
