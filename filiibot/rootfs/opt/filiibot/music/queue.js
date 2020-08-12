@@ -1,13 +1,16 @@
-module.exports.permissionRequired = 0
+module.exports = {
+  name: 'queue',
+  description: 'Queue command.',
+  cooldown: 5,
+  execute(message) {
+    const serverQueue = message.client.queue.get(message.guild.id);
+    if (!serverQueue) return message.channel.send('There is nothing playing.');
+    return message.channel.send(`
+__**Song queue:**__
 
-module.exports.run = async (client, message, args, config, queue) => {
-  const serverQueue = queue.get(message.guild.id)
-  if (!serverQueue || serverQueue.songs.length == 0) return message.channel.send("❌ There is nothing playing right now!")
-  if (serverQueue.songs.length == 1) return message.channel.send("❌ The queue is empty!")
+${serverQueue.songs.map((song) => `**-** ${song.title}`).join('\n')}
 
-  return message.channel.send([
-    "__**Song queue:**__",
-    serverQueue.songs.slice(1).map(song => `- ${song.title}`).join("\n"),
-    `**Now playing:** ${serverQueue.songs[0].title}`
-  ].join("\n\n"))
-}
+**Now playing:** ${serverQueue.songs[0].title}
+		`);
+  },
+};

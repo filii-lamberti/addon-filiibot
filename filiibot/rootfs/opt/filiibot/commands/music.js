@@ -9,16 +9,18 @@ const { Collection } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
-  name: 'ping',
-  description: 'Ping!',
+  name: 'music',
+  description: 'Music!',
   execute(message, _args) {
     const subCommandName = _args[0].toLowerCase();
     const subCommands = new Collection();
 
+    message.client.log('music')
+
     const musicVoiceChannel = message.client.channels.cache.get('471387094242033674');
     const musicTextChannel = message.client.channels.cache.get('471386777526075403');
 
-    const subCommandFiles = fs.readdirSync('../music').filter((file) => file.endsWith('.js'));
+    const subCommandFiles = fs.readdirSync('./music').filter((file) => file.endsWith('.js'));
     for (const file of subCommandFiles) {
       // eslint-disable-next-line global-require, import/no-dynamic-require
       const subCommand = require(`../music/${file}`);
@@ -27,7 +29,7 @@ module.exports = {
       subCommands.set(subCommand.name, subCommand);
     }
 
-    if (!message.client.commands.has(subCommandName)) return;
+    if (!subCommands.has(subCommandName)) return;
     const subCommand = subCommands.get(subCommandName);
     subCommand.execute(message, _args);
 
