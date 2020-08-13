@@ -8,7 +8,7 @@ module.exports = {
   name: 'stop',
   description: 'Stop!',
   execute(message, _args) {
-    if (!message.client.member.serverGod(message)) return;
+    if (!message.client.member.constructor.serverGod(message)) return;
 
     if (!message.client.config.supervisorToken) {
       message.reply('sorry, you need to run this as an add-on to use this!');

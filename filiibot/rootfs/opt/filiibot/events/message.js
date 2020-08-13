@@ -15,8 +15,8 @@ class Message {
     const messageTrimmed = message.content.trim();
 
     this.checkAfk(message);
-    this.checkBen(message, messageTrimmed);
-    this.checkTwaalf(message, messageTrimmed);
+    this.constructor.checkBen(message, messageTrimmed);
+    this.constructor.checkTwaalf(message, messageTrimmed);
 
     // Otherwise check if the prefix is there
     if (!messageTrimmed.startsWith(this.client.config.prefix)) return;

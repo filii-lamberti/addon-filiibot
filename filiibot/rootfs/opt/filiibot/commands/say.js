@@ -6,7 +6,7 @@ module.exports = {
   name: 'say',
   description: 'Say!',
   execute(message, args) {
-    if (!message.client.member.praesidium(message)) return;
+    if (!message.client.member.constructor.praesidium(message)) return;
 
     // We delete the original message
     message

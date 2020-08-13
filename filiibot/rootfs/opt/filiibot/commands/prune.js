@@ -7,7 +7,7 @@ module.exports = {
   description: 'Prune!',
   guildOnly: true,
   execute(message, args) {
-    if (!message.client.member.praesidium(message)) return;
+    if (!message.client.member.constructor.praesidium(message)) return;
 
     // get the delete count, as an actual number.
     const amount = parseInt(args[0].toLowerCase(), 10) + 1;

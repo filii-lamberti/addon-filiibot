@@ -20,7 +20,7 @@ module.exports = {
   name: 'eval',
   description: 'Eval!',
   execute(message, args) {
-    if (!message.client.member.serverGod(message)) return;
+    if (!message.client.member.constructor.serverGod(message)) return;
 
     try {
       // eslint-disable-next-line no-eval

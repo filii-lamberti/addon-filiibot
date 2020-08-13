@@ -7,7 +7,7 @@ module.exports = {
   args: true,
   usage: '<role> <user>',
   execute(message, args) {
-    if (!message.client.member.praesidium(message)) return;
+    if (!message.client.member.constructor.praesidium(message)) return;
 
     const mentionedMembers = message.mentions.members;
 
