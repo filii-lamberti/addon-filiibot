@@ -554,10 +554,10 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   dependencies:
     once "^1.4.0"
 
-enmap@^5.4.1:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/enmap/-/enmap-5.5.1.tgz#c27dc2cc8b72f14f083ab631adf01cca7a72e960"
-  integrity sha512-D5g3pRF7DVgJIuvjdwIxAbCFswkCKu2lEIPhY8Np3gZknDzWF9CX0WL1q12xqrZXsI6uhQdVk423YnzUEs7WRg==
+enmap@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/enmap/-/enmap-5.6.1.tgz#a193c256512ed5c3b61da04730bbb8c3c71d3835"
+  integrity sha512-JVlG/j9w/7TPVxaFH6Lm/BTPBxhEK5ALe+8iLOjcMRdAWiQ+7AG4J3Q15Uc3SDqIJt+tH+WhvtQ7+pv+KzgSeA==
   dependencies:
     lodash "^4.17.19"
     on-change "^2.0.1"
