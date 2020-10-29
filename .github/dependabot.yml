@@ -4,14 +4,11 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
 - package-ecosystem: docker
   directory: "/filiibot"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/filiibot/rootfs/opt/filiibot"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
