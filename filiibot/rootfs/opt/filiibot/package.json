@@ -15,7 +15,7 @@
     "humanize-duration": "^3.24.0",
     "moment": "^2.29.1",
     "mqtt": "^4.2.4",
-    "ytdl-core": "^3.2.2",
+    "ytdl-core": "^4.1.7",
     "ytpl": "^0.3.0",
     "ytsr": "^0.1.21"
   },
