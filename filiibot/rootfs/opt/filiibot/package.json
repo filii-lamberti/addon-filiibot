@@ -16,7 +16,7 @@
     "moment": "^2.29.1",
     "mqtt": "^4.2.4",
     "ytdl-core": "^3.2.2",
-    "ytpl": "^0.3.0",
+    "ytpl": "^2.1.1",
     "ytsr": "^0.1.21"
   },
   "devDependencies": {
