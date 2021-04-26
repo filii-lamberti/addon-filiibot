@@ -1304,6 +1304,11 @@ miniget@^2.0.1:
   resolved "https://registry.yarnpkg.com/miniget/-/miniget-2.0.1.tgz#e2188573317ad8239bab33f056aae64804fc8e47"
   integrity sha512-MX+QfVIPAutz6c+T7WKuFKtjcw0nOyRRh1ubhTDD+z/e/pKcSAsfAV63aQKUgb1MFRT1GyfJeW53N5fHkX0wIA==
 
+miniget@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/miniget/-/miniget-4.2.0.tgz#0004e95536b192d95a7d09f4435d67b9285481d0"
+  integrity sha512-IzTOaNgBw/qEpzkPTE7X2cUVXQfSKbG8w52Emi93zb+Zya2ZFrbmavpixzebuDJD9Ku4ecbaFlC7Y1cEESzQtQ==
+
 minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -1446,11 +1451,6 @@ node-gyp-build@^4.2.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.2.3.tgz#ce6277f853835f718829efb47db20f3e4d9c4739"
   integrity sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==
-
-node-gyp-build@~3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-3.7.0.tgz#daa77a4f547b9aed3e2aac779eaf151afd60ec8d"
-  integrity sha512-L/Eg02Epx6Si2NXmedx+Okg+4UHqmaf3TNcxd50SF9NQGcJaON3AtU++kax69XV7YWz4tUspqZSAsVofhFKG2w==
 
 noop-logger@^0.1.1:
   version "0.1.1"
@@ -2332,12 +2332,12 @@ ytdl-core@^3.2.2:
     miniget "^2.0.1"
     sax "^1.1.3"
 
-ytpl@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/ytpl/-/ytpl-0.3.0.tgz#f1a598725eadeda09125dd36357ea95d6f1e13e4"
-  integrity sha512-O4OLvZQoTKYnjzUurT8dV8+MrPUcv9hito3gH98J6fY2GwEWscGcd7w7JJT0dgb3v3iBGryssYTSRLLj3oIPnA==
+ytpl@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/ytpl/-/ytpl-2.2.0.tgz#8e394e3bb1042bcd3eb16c6228adf6acd39dd85c"
+  integrity sha512-/HNXS1srPiZuOZkrRO1bPhFYJeUzunXc3aQxRyOEn7Io1PNQlAh+mk9fbDe6srIF92A43gdCkSnFQBAZeuq5Bw==
   dependencies:
-    html-entities "^1.1.3"
+    miniget "^4.2.0"
 
 ytsr@^0.1.21:
   version "0.1.21"
