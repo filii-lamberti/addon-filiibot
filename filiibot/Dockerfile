@@ -17,27 +17,19 @@ COPY \
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base=0.5-r2 \
-        npm=12.18.4-r0 \
+        npm=7.17.0-r0 \
         python2=2.7.18-r0 \
-        yarn=1.22.4-r0 \
     \
     && apk add --no-cache \
         ffmpeg=4.3.1-r0 \
-        nodejs=12.18.4-r0 \
+        nodejs=14.17.6-r0 \
     \
     && cd /opt/filiibot \
     \
-    && yarn global add modclean \
-    && yarn --production \
+    && npm install --production \
     \
-    && modclean \
-        --path /opt/filiibot \
-        --no-progress \
-        --keep-empty \
-        --run \
-    \
-    && yarn global remove modclean \
-    && yarn cache clean \
+    && npx mod-pruner init --force \
+    && npx mod-pruner prune --force \
     \
     && apk del --no-cache --purge .build-dependencies
 
