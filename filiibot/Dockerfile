@@ -9,7 +9,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY rootfs/etc /etc/
 COPY \
     rootfs/opt/filiibot/package.json \
-    rootfs/opt/filiibot/yarn.lock \
+    rootfs/opt/filiibot/package-lock.json \
     /opt/filiibot/
 
 # Setup base
