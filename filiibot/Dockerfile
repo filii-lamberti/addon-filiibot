@@ -21,7 +21,7 @@ RUN \
         python2=2.7.18-r2 \
     \
     && apk add --no-cache \
-        ffmpeg=4.3.1-r0 \
+        ffmpeg=4.4-r1 \
         nodejs=14.18.1-r0 \
     \
     && cd /opt/filiibot \
