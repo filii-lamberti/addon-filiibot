@@ -5,6 +5,6 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Replies with Pong!'),
 	async execute(interaction) {
-		return interaction.reply('Pong!');
-	},
+		const sent = await interaction.reply({ content: `Websocket heartbeat: ${client.ws.ping}ms.`, fetchReply: true });
+		return interaction.editReply(`Roundtrip latency: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);	},
 };
