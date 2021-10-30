@@ -4,6 +4,7 @@
 
 module.exports = {
   name: 'error',
+  description: 'This event triggers when an error occurs.',
   execute(error) {
     console.log(error);
     // this.client.log(error);
