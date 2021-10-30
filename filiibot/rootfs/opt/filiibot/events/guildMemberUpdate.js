@@ -1,23 +1,22 @@
 /*
- * This event triggers when
+ * This event triggers when a member is updated in a guild.
  */
-class GuildMemberUpdate {
-  constructor(client) {
-    this.client = client;
-  }
 
-  on(oldMember, newMember) {
-    // If the nickname is the same, was [AFK] or is [AFK], do nothing.
+module.exports = {
+  name: 'guildMemberUpdate',
+  description: 'This event triggers when a member is updated in a guild.',
+  execute(client, oldMember, newMember) {
+    // If the nickname is the same, was [AFK] or is [AFK], do nothing
     if (
-      oldMember.nickname === newMember.nickname
-      || !newMember.nickname
-      || newMember.nickname.substring(0, 6) === '[AFK] '
-      || !oldMember.nickname
-      || oldMember.nickname.substring(0, 6) === '[AFK] '
+      oldMember.nickname === newMember.nickname ||
+      !oldMember.nickname ||
+      oldMember.nickname.substring(0, 6) === '[AFK] ' ||
+      !newMember.nickname ||
+      newMember.nickname.substring(0, 6) === '[AFK] '
     ) return;
-    this.client.log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
-    oldMember.client.enmap.people.set(newMember.id, newMember.displayName, 'name');
+    // Log the nickname change
+    console.log(`Name of "${oldMember.displayName}" changed to "${newMember.displayName}"`);
+    // Save the nickname change to the database
+    // oldMember.client.enmap.people.set(newMember.id, newMember.displayName, 'name');
   }
 }
-
-module.exports = GuildMemberUpdate;

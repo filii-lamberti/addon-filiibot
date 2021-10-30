@@ -3,9 +3,16 @@
  */
 const { Collection } = require('discord.js');
 
-class Message {
-  constructor(client) {
-    this.client = client;
+module.exports = {
+  name: 'messageCreate',
+  description: 'This event will run on every single message received, from any channel or DM.',
+  execute(client, message) {
+    // Ignore all bots
+    if (message.author.bot) return;
+    // Store the original trimmed content of the message
+    const content = message.content.trim();
+
+    
   }
 
   async on(message) {
@@ -111,5 +118,3 @@ class Message {
     }
   }
 }
-
-module.exports = Message;
