@@ -28,7 +28,6 @@ RUN \
     \
     && npm install --production \
     \
-    && npx mod-pruner init --force \
     && npx mod-pruner prune --force \
     \
     && apk del --no-cache --purge .build-dependencies
@@ -42,25 +41,28 @@ COPY \
 # Build arguments
 ARG BUILD_ARCH
 ARG BUILD_DATE
+ARG BUILD_DESCRIPTION
+ARG BUILD_NAME
 ARG BUILD_REF
+ARG BUILD_REPOSITORY
 ARG BUILD_VERSION
 
 # Labels
 LABEL \
-    io.hass.name="Filiibot" \
-    io.hass.description="A Filiibot add-on for Home Assistant" \
+    io.hass.name="${BUILD_NAME}" \
+    io.hass.description="${BUILD_DESCRIPTION}" \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
     maintainer="Jorim Tielemans <tielemans.jorim@gmail.com>" \
-    org.opencontainers.image.title="Filiibot" \
-    org.opencontainers.image.description="A Filiibot add-on for Home Assistant" \
+    org.opencontainers.image.title="${BUILD_NAME}" \
+    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
     org.opencontainers.image.vendor="Filii Lamberti" \
     org.opencontainers.image.authors="Jorim Tielemans <tielemans.jorim@gmail.com>" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="https://filii.be" \
-    org.opencontainers.image.source="https://gitlab.com/filii-lamberti/addon-filiibot" \
-    org.opencontainers.image.documentation="https://gitlab.com/filii-lamberti/addon-filiibot" \
+    org.opencontainers.image.url="https://github.com/filii-lamberti/filii-addons" \
+    org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
