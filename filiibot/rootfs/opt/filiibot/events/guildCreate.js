@@ -1,16 +1,12 @@
 /*
  * This event triggers when the bot joins a guild.
  */
-class GuildCreate {
-  constructor(client) {
-    this.client = client;
-  }
 
-  on(guild) {
-    this.client.log(
-      `New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`,
-    );
-  }
-}
-
-module.exports = GuildCreate;
+module.exports = {
+    name: 'GuildCreate',
+    description: 'This event triggers when the bot joins a guild.',
+    execute(client, guild) {
+        console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+        client.user.setActivity(`Serving ${client.guilds.size} servers`);
+    },
+};

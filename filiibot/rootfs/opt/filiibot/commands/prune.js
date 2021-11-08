@@ -1,25 +1,21 @@
-/*
- * If the command is 'prune'
- * removes all messages from all users in the channel, up to 100.
- */
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
-  name: 'prune',
-  description: 'Prune!',
-  guildOnly: true,
-  execute(message, args) {
-    if (!message.client.member.constructor.praesidium(message)) return;
+	data: new SlashCommandBuilder()
+		.setName('prune')
+		.setDescription('Prune up to 99 messages.')
+		.addIntegerOption(option => option.setName('amount').setDescription('Number of messages to prune')),
+	async execute(interaction) {
+		const amount = interaction.options.getInteger('amount');
 
-    // get the delete count, as an actual number.
-    const amount = parseInt(args[0].toLowerCase(), 10) + 1;
-    if (!amount || amount < 1 || amount > 99) {
-      message.reply('geef een getal tussen 1 en 99 voor het aantal te verwijderen berichten.');
-      return;
-    }
+		if (amount <= 1 || amount > 100) {
+			return interaction.reply({ content: 'You need to input a number between 1 and 99.', ephemeral: true });
+		}
+		await interaction.channel.bulkDelete(amount, true).catch(error => {
+			console.error(error);
+			interaction.reply({ content: 'There was an error trying to prune messages in this channel!', ephemeral: true });
+		});
 
-    // delete the messages
-    message.channel.bulkDelete(amount, true)
-      .then((messages) => message.client.log(`Bulk deleted ${messages.size} messages`))
-      // catch delete error
-      .catch((error) => message.reply(`kon berichten niet verwijderen omdat: ${error}`));
-  },
+		return interaction.reply({ content: `Successfully pruned \`${amount}\` messages.`, ephemeral: true });
+	},
 };

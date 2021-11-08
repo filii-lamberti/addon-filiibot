@@ -1,32 +1,28 @@
 {
   "name": "filiibot",
   "version": "1.0.0",
-  "main": "bot.js",
-  "repository": "https://gitlab.com/filii-lamberti/addon-filiibot",
-  "author": "Filii Lamberti",
-  "license": "MIT",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "node deploy-commands.js",
+    "lint": "eslint .",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.6.0",
-    "axios": "^0.24.0",
-    "better-sqlite3": "^7.4.4",
-    "discord.js": "^13.3.1",
-    "enmap": "^5.8.0",
+    "@discordjs/builders": "^0.7.0",
+    "@discordjs/opus": "^0.5.3",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@discordjs/voice": "^0.6.0",
+    "discord-api-types": "^0.24.0",
+    "discord.js": "^13.2.0",
     "ffmpeg-static": "^4.4.0",
-    "humanize-duration": "^3.24.0",
-    "moment": "^2.29.1",
     "mqtt": "^4.2.8",
-    "ytdl-core": "^4.9.1",
-    "ytpl": "^2.2.3",
-    "ytsr": "^3.5.3"
+    "ytdl-core": "^4.9.1"
   },
   "devDependencies": {
-    "eslint": "8.2.0",
-    "eslint-config-airbnb-base": "14.2.1",
-    "eslint-plugin-import": "2.25.2"
-  },
-  "optionalDependencies": {
-    "bufferutil": "^4.0.5",
-    "libsodium-wrappers": "^0.7.8",
-    "utf-8-validate": "^5.0.7"
+    "eslint": "^8.1.0"
   }
 }

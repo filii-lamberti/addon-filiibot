@@ -1,17 +1,15 @@
 /*
- * This event triggers when
+ * This event triggers when an error occurs.
  */
-class Error {
-  constructor(client) {
-    this.client = client;
-  }
 
-  on(error) {
-    this.client.log(error);
-    this.client.enmap.people.close();
-    this.client.mqtt.client.end();
+module.exports = {
+  name: 'error',
+  description: 'This event triggers when an error occurs.',
+  execute(error) {
+    console.log(error);
+    // this.client.log(error);
+    // this.client.enmap.people.close();
+    // this.client.mqtt.client.end();
     process.exit(1);
   }
 }
-
-module.exports = Error;
