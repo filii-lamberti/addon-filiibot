@@ -23,7 +23,7 @@ jobs:
           ADDON_VERSION=$( cut -c12- <<< ${{ github.ref }} )
           sed -i "s/dev/$ADDON_VERSION/g" filiibot/config.json
       - name: Build and push tagged Docker image
-        uses: home-assistant/builder@2021.09.0
+        uses: home-assistant/builder@2021.11.3
         with:
           args: |
             --all \
