@@ -9,7 +9,7 @@
     "@discordjs/opus": "^0.7.0",
     "axios": "^0.24.0",
     "better-sqlite3": "^7.4.6",
-    "discord.js": "^13.5.1",
+    "discord.js": "^13.6.0",
     "enmap": "^5.8.0",
     "ffmpeg-static": "^4.4.1",
     "humanize-duration": "^3.27.1",
