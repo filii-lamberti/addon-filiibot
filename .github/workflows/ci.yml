@@ -42,7 +42,7 @@ jobs:
         run: |
           sed -i "s/dev/latest/g" filiibot/config.json
       - name: Build and push latest Docker image
-        uses: home-assistant/builder@2021.09.0
+        uses: home-assistant/builder@2022.07.0
         with:
           args: |
             --amd64 \
