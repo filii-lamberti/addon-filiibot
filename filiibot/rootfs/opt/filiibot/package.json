@@ -17,7 +17,7 @@
     "mqtt": "^4.3.7",
     "ytdl-core": "^4.11.3",
     "ytpl": "^2.3.0",
-    "ytsr": "^3.8.1"
+    "ytsr": "^3.8.2"
   },
   "devDependencies": {
     "eslint": "8.38.0",
