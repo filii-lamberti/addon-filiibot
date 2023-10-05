@@ -14,7 +14,7 @@
     "ffmpeg-static": "^5.1.0",
     "humanize-duration": "^3.29.0",
     "moment": "^2.29.4",
-    "mqtt": "^4.3.7",
+    "mqtt": "^5.1.0",
     "ytdl-core": "^4.11.5",
     "ytpl": "^2.3.0",
     "ytsr": "^3.8.2"
